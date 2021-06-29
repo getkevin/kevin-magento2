@@ -1,0 +1,25 @@
+<div class="field required kevin-payment-list">
+    <h3 data-bind="i18n: 'Payment methods'"></h3>
+    <ul class="form-banks" data-bind="attr: { 'id': 'payment-list-' + getCode() }">
+        <!-- ko foreach: { data: getBanks(), as: 'bank' } -->
+        <li data-bind="
+            attr: { 'class': 'kevin-payment-item kevin-payment-item-' + bank.id }">
+            <label>
+                <img class="kevin-payment-item-icon" data-bind="
+                        attr: {
+                            'src': bank.logoPath,
+                            'alt': bank.title
+                        }"/>
+                <input type="radio" name="payment[bank]" data-bind="
+                    attr: {
+                        'id': bank.id,
+                        'data-name': bank.title
+                     },
+                    value: bank.id,
+                    click: $parent.selectBank, visible: $parent.isBankInputVisible"
+                />
+            </label>
+        </li>
+        <!-- /ko -->
+    </ul>
+</div>

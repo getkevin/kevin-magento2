@@ -1,0 +1,26 @@
+{
+  "name": "getkevin/kevin-magento2",
+  "description": "Implements integration with the Kevin payment service provider.",
+  "authors": [
+    {
+      "name": "Marius",
+      "email": "marek.svorobovic@gmail.com"
+    }
+  ],
+  "require": {
+    "quickpay/quickpay-php-client": "0.14.*"
+  },
+  "type": "magento2-module",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Kevin\\Payment\\": ""
+    }
+  }
+}

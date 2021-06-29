@@ -1,0 +1,24 @@
+.kevin-payment-list {
+    margin-bottom: 20px;
+}
+.kevin-payment-list ul {
+    padding: 0px;
+}
+.kevin-payment-list ul li {
+    border: 1px solid #cccccc;
+    padding: 5px;
+    margin: 10px 5px 0px 0px;
+    display: inline-block;
+    width: 135px;
+    cursor: pointer;
+}
+.kevin-payment-list ul li label {
+    display: block;
+    text-align: center;
+}
+.kevin-payment-list ul li img {
+    cursor: pointer;
+}
+.kevin-payment-list ul li.active {
+    border: 1px solid #000;
+}

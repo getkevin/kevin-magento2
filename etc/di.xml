@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="kevin_test" xsi:type="object">Kevin\Payment\Console\Command\Test</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="KevinPaymentConfig" type="Kevin\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">\Kevin\Payment\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Payment Methods Facade configuration -->
+    <virtualType name="KevinPaymentFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">\Kevin\Payment\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">\Kevin\Payment\Block\Adminhtml\Info</argument>
+            <argument name="commandPool" xsi:type="object">KevinPaymentCommandPool</argument>
+            <argument name="valueHandlerPool" xsi:type="object">KevinPaymentValueHandlerPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="KevinPaymentCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="refund" xsi:type="string">\Kevin\Payment\Gateway\Command\RefundCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Value handlers infrastructure -->
+    <virtualType name="KevinPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">KevinPaymentConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="KevinPaymentConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">KevinPaymentConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Custom Logger -->
+    <type name="Kevin\Payment\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Kevin\Payment\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">kevinLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Kevin\Payment\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
