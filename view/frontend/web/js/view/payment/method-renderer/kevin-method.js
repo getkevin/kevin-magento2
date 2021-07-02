@@ -16,28 +16,26 @@ define([
         },
 
         showBanks: function() {
-            return window.checkoutConfig.payment.kevin_payment.show_banks && this.getBanks();
+            return window.checkoutConfig.payment.kevin_payment.show_banks && this.getBanks().length;
         },
 
         getBanks: function() {
+            var activeList = [];
             if(quote.shippingAddress()){
                 var countryId = quote.shippingAddress().countryId
-                var activeList = [];
                 if(countryId){
                     var bankList = window.checkoutConfig.payment.kevin_payment.banks;
                     if(bankList) {
                         if (bankList[countryId] != undefined) {
                             activeList = bankList[countryId];
                         }
-                    }
-                    if(bankList['card'] != undefined){
-                        activeList = activeList.concat(bankList['card']);
+                        if(bankList['card'] != undefined){
+                            activeList = activeList.concat(bankList['card']);
+                        }
                     }
                 }
-
-                return activeList;
             }
-            return null;
+            return activeList;
         },
 
         getSelectedBankCode: function() {
