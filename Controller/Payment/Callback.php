@@ -128,7 +128,8 @@ class Callback extends \Magento\Framework\App\Action\Action
                     $this->_redirect('checkout', ['_fragment' => 'payment']);
                     return;
                 } elseif($results['group'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
-                    try {
+                    //disabled because magento was capturing order twice when callback and webhook working at same time.
+                    /*try {
                         if ($order->canInvoice()) {
                             $invoice = $this->invoiceService->prepareInvoice($order);
                             $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
@@ -165,7 +166,7 @@ class Callback extends \Magento\Framework\App\Action\Action
                         }
                     } catch (\Exception $exc) {
                         $this->logger->critical($exc->getMessage());
-                    }
+                    }*/
                 }
             }
         }
