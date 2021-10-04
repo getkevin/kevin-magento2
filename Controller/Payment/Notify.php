@@ -147,6 +147,9 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         || $group == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_STARTED) {
                                         if ($order->getId() && !$order->isCanceled()) {
                                             $order->registerCancellation('')->save();
+
+                                            $order->addStatusToHistory($order->getStatus(), "Canceled by kevin webhook.");
+                                            $order->save();
                                         }
                                     } elseif ($results['group'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
                                         try {

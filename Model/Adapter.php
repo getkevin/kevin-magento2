@@ -88,9 +88,9 @@ class Adapter
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
             'bankPaymentMethod' => [
                 'endToEndId' => $order->getIncrementId(),
-                'creditorName' => $this->config->getCompanyName(),
+                'creditorName' => $this->config->getCompanyName() ? $this->config->getCompanyName() : '',
                 'creditorAccount' => [
-                    'iban' => $this->config->getCompanyBankAccount(),
+                    'iban' => $this->config->getCompanyBankAccount() ? $this->config->getCompanyBankAccount() : '',
                 ]
             ]
         ];
