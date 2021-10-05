@@ -3,3 +3,7 @@
 "Something went wrong, please try again later","Что-то пошло не так. Пожалуйста, повторите попытку позже"
 "Wrong payment request","Неверный запрос на оплату"
 "Order","Заказ"
+"Payment initiation was cancelled. Please try again.","Инициирование платежа отменено. Пожалуйста, попробуйте еще раз."
+"We will start executing the order only after receiving the payment.","Мы приступим к выполнению заказа только после получения оплаты."
+"Thank you for your payment. Your transaction has been completed and a receipt for your purchase has been emailed to you.","Спасибо за оплату. Ваша транзакция была успешно завершена и квитанция ​​о покупке была отправлена вам по электронной почте."
+"Unfortunately, your order cannot be processed as the originating bank has declined your transaction. Please attempt your purchase again.","К сожалению, ваш заказ не может быть обработан, поскольку банк-отправитель отклонил вашу транзакцию. Пожалуйста, попробуйте оплатить еще раз."

@@ -3,3 +3,7 @@
 "Something went wrong, please try again later","Kaut kas nogāja greizi, lūdzu, mēģiniet vēlreiz pēc kāda laika"
 "Wrong payment request","Nepareizs maksājuma pieprasījums"
 "Order","Pasūtījums"
+"Payment initiation was cancelled. Please try again.","Maksājuma iniciēšana tika atcelta. Lūdzu, mēģiniet vēlreiz."
+"We will start executing the order only after receiving the payment.","Pasūtījumu mēs sāksim izpildīt tikai pēc maksājuma saņemšanas."
+"Thank you for your payment. Your transaction has been completed and a receipt for your purchase has been emailed to you.","Paldies par maksājumu. Transakcija ir pabeigta, kvīts par pirkumu jums ir nosūtīta pa e-pastu."
+"Unfortunately, your order cannot be processed as the originating bank has declined your transaction. Please attempt your purchase again.","Diemžēl pasūtījumu nevar apstrādāt, jo banka ir noraidījusi Jūsu transakciju. Lūdzu, mēģiniet veikt pirkumu vēlreiz."

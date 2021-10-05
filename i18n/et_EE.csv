@@ -3,3 +3,7 @@
 "Something went wrong, please try again later","Midagi läks valesti, proovige hiljem uuesti"
 "Wrong payment request","Vale maksetaotlus"
 "Order","Telli"
+"Payment initiation was cancelled. Please try again.","Makse algatamine tühistati. Palun proovi uuesti."
+"We will start executing the order only after receiving the payment.","Hakkame tellimust täitma peale makse laekumist."
+"Thank you for your payment. Your transaction has been completed and a receipt for your purchase has been emailed to you.","Tänan makse eest. Teie tehing on lõpule viidud ja teile saadeti teie ostukviitung e-postiga."
+"Unfortunately, your order cannot be processed as the originating bank has declined your transaction. Please attempt your purchase again.","Kahjuks ei saa teie tellimust töödelda, kuna maksepank on teie tehingu tagasi lükanud. Palun proovige uuesti osta."

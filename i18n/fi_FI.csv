@@ -3,3 +3,7 @@
 "Something went wrong, please try again later","Jotain meni pieleen yritä uudelleen"
 "Wrong payment request","väärä maksukysely"
 "Order","Tilaus"
+"Payment initiation was cancelled. Please try again.","Maksun aloitus peruutettiin. Yritä uudelleen."
+"We will start executing the order only after receiving the payment.","Aloitamme tilauksen käsittelyn maksun vastaanottamisen jälkeen."
+"Thank you for your payment. Your transaction has been completed and a receipt for your purchase has been emailed to you.","Kiitos maksusta! Maksusi on suoritettu ja kuitti on lähetetty sinulle sähköpostitse."
+"Unfortunately, your order cannot be processed as the originating bank has declined your transaction. Please attempt your purchase again.","Valitettavasti tilaustasi ei voi käsitellä, koska pankki on kieltäytynyt tapahtumastasi. Yritä ostosta uudelleen."
