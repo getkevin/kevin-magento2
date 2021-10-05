@@ -11,6 +11,7 @@ class Adapter
     const PAYMENT_STATUS_GROUP_SUCCESS = 'completed';
     const PAYMENT_STATUS_GROUP_ERROR = 'failed';
     const PAYMENT_STATUS_GROUP_STARTED = 'started';
+    const PAYMENT_STATUS_GROUP_PENDING = 'pending';
 
     const PAYMENT_STATUS_REJECTED = 'RJCT';
     const PAYMENT_STATUS_RECEIVED = 'RCVD';

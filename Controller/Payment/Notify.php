@@ -103,9 +103,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                         $paymentId = $response['id'];
                     }
 
-
                     $transaction = $this->adapter->getTransaction($paymentId);
-
                     if ($transaction->getId()) {
                         $order = $transaction->getOrder();
 
@@ -120,8 +118,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                     $order->addStatusToHistory($order->getStatus(), "Refund accepted.");
                                     $order->save();
 
-                                    $this->getResponse()->setBody('OK');
-                                    $this->emulation->stopEnvironmentEmulation();
+                                    return $this->getResponse()->setBody(sprintf('Payment with ID "%s" was refunded', $paymentId));
                                 }
                             } else {
 
@@ -129,7 +126,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                     $order::STATE_NEW,
                                     $order::STATE_PENDING_PAYMENT
                                 ))) {
-                                    return $this->getResponse()->setBody('OK');
+                                    return $this->getResponse()->setBody(sprintf('Order "%s" status is already changed', $order->getIncrementId()));
                                 }
 
                                 $additional = $transaction->getAdditionalInformation();
@@ -148,8 +145,10 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         if ($order->getId() && !$order->isCanceled()) {
                                             $order->registerCancellation('')->save();
 
-                                            $order->addStatusToHistory($order->getStatus(), "Canceled by kevin webhook.");
+                                            $order->addStatusToHistory($order->getStatus(), "Canceled by kevin.");
                                             $order->save();
+
+                                            $this->getResponse()->setBody(sprintf('Order "%s" was canceled', $order->getIncrementId()));
                                         }
                                     } elseif ($results['group'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
                                         try {
@@ -187,20 +186,32 @@ class Notify extends \Magento\Framework\App\Action\Action
 
                                                 $this->invoiceSender->send($invoice);
 
-                                                $this->getResponse()->setBody('OK');
+                                                $this->getResponse()->setBody(sprintf('Order "%s" payment was approved', $order->getIncrementId()));
                                             }
                                         } catch (\Exception $exc) {
+                                            $this->getResponse()->setHttpResponseCode(400);
+                                            $this->getResponse()->setBody($exc->getMessage());
+
                                             $this->logger->critical($exc->getMessage());
                                         }
                                     }
+                                } else {
+                                    $this->getResponse()->setHttpResponseCode(400);
+                                    $this->getResponse()->setBody(sprintf('Payment with ID "%s" not found in kevin', $paymentId));
                                 }
 
                                 $this->emulation->stopEnvironmentEmulation();
                             }
                         }
+                    } else {
+                        $this->getResponse()->setHttpResponseCode(400);
+                        $this->getResponse()->setBody(sprintf('Payment with ID "%s" not found in magento', $paymentId));
                     }
                 }
             }
+        } else {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->getResponse()->setBody('Response body is empty');
         }
     }
 
