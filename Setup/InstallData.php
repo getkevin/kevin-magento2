@@ -9,7 +9,7 @@ use Magento\Framework\DB\Ddl\Table;
 
 class InstallData implements InstallDataInterface
 {
-    const ORDER_STATUS_REFUND_PENDING = 'refund_pending';
+
 
     /**
      * Installs DB schema for a module
@@ -31,7 +31,7 @@ class InstallData implements InstallDataInterface
             $setup->getTable('sales_order_status_state'),
             ['status', 'state', 'is_default','visible_on_front'],
             [
-                [self::ORDER_STATUS_REFUND_PENDING,'closed', '0', '1'],
+                [\Kevin\Payment\Helper\Data::ORDER_STATUS_REFUND_PENDING,'closed', '0', '1'],
             ]
         );
 

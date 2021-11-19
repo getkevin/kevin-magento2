@@ -8,6 +8,7 @@
                 <title>Kevin Payments</title>
                 <order_status>pending</order_status>
                 <payment_list>0</payment_list>
+                <show_name>0</show_name>
                 <redirect_preferred>0</redirect_preferred>
                 <order_email_after>1</order_email_after>
                 <allowspecific>0</allowspecific>
@@ -15,11 +16,13 @@
                 <can_use_internal>0</can_use_internal>
                 <can_initialize>0</can_initialize>
                 <can_refund>1</can_refund>
-                <can_refund_partial_per_invoice>0</can_refund_partial_per_invoice>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <group>offline</group>
                 <sort_order>1</sort_order>
                 <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <signature backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <model>KevinPaymentFacade</model>
             </kevin_payment>
         </payment>

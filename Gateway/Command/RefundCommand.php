@@ -97,14 +97,21 @@ class RefundCommand implements \Magento\Payment\Gateway\CommandInterface
                 //emulate environment to get specific store config data
                 $this->emulation->startEnvironmentEmulation($order->getStoreId());
 
-                $this->adapter->initRefund($payment->getPayment(), $amount);
+                $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+                $transaction = $objectManager->create('\Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory')->create()
+                    ->addOrderIdFilter($order->getId())
+                    ->setOrder('transaction_id','ASC')
+                    ->getFirstItem();
 
-                $order
-                    ->setState(\Magento\Sales\Model\Order::STATE_CLOSED)
-                    ->setStatus(\Kevin\Payment\Setup\InstallData::ORDER_STATUS_REFUND_PENDING);
+                $transactionId = $transaction->getTxnId();
 
-                $order->addStatusToHistory($order->getStatus(), "Refund request sent to kevin.");
-                $order->save();
+                $results = $this->adapter->initRefund($transactionId, $amount);
+                
+                if(isset($results['id'])){
+                    $payment->getPayment()->setTransactionId($results['id']);
+                } else {
+                    throw new \Exception('Kevin Error');
+                }
 
                 $this->emulation->stopEnvironmentEmulation();
             }

@@ -1,7 +1,24 @@
 <div class="field required kevin-payment-list">
     <h3 data-bind="i18n: 'Payment methods'"></h3>
-    <ul class="form-banks" data-bind="attr: { 'id': 'payment-list-' + getCode() }">
-        <!-- ko foreach: { data: getBanks(), as: 'bank' } -->
+
+    <div class="fields-wrapper">
+        <div class="text-input country-input">
+            <select data-bind="options: availableCountries,
+                           optionsText: 'label',
+                           optionsValue: 'value',
+                           optionsCaption: $t('Select bank country'), value: selectedCountry" name="country"></select>
+        </div>
+
+        <div class="text-input search-input" data-bind="visible: showSearch">
+            <input type="search" data-bind="value: searchText, valueUpdate: 'afterkeydown', attr: {placeholder: $t('Search for a bank...')}" />
+            <button class="action search"></button>
+        </div>
+    </div>
+
+    <!-- ko if: showBanks() -->
+
+    <ul class="form-banks" data-bind="attr: { 'id': 'payment-list-' + getCode() }, css: { 'show-names': showBankName() }">
+        <!-- ko foreach: { data: availableBanks, as: 'bank' } -->
         <li data-bind="
             attr: { 'class': 'kevin-payment-item kevin-payment-item-' + bank.id }">
             <label>
@@ -10,6 +27,7 @@
                             'src': bank.logoPath,
                             'alt': bank.title
                         }"/>
+                <span class="title" data-bind="text: bank.title, visible: $parent.showBankName()"></span>
                 <input type="radio" name="payment[bank]" data-bind="
                     attr: {
                         'id': bank.id,
@@ -22,4 +40,5 @@
         </li>
         <!-- /ko -->
     </ul>
+    <!-- /ko -->
 </div>

@@ -76,15 +76,26 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return mixed
      */
+    public function getSignature(){
+        return $this->getValue('signature');
+    }
+
+    /**
+     * @return mixed
+     */
     public function getRedirectPreferred(){
-        return $this->getValue('redirect_preferred');
+        return (int) $this->getValue('redirect_preferred');
+    }
+
+    public function getShowPaymentName(){
+        return (int) $this->getValue('show_name');
     }
 
     /**
      * @return mixed
      */
     public function getPaymentList(){
-        return $this->getValue('payment_list');
+        return (int) $this->getValue('payment_list');
     }
 
     /**

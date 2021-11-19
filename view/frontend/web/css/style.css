@@ -1,16 +1,57 @@
 .kevin-payment-list {
     margin-bottom: 20px;
 }
+.kevin-payment-list .fields-wrapper {
+    margin: 15px 0px 10px 0px;
+}
+.kevin-payment-list .fields-wrapper .text-input {
+    display: inline-block;
+}
+.kevin-payment-list .fields-wrapper .country-input {
+    width: 200px;
+    margin-right: 20px;
+}
+.kevin-payment-list .fields-wrapper .search-input {
+    width: 300px;
+    position: relative;
+}
+.kevin-payment-list .fields-wrapper .search-input input {
+    background: #f6f6f6;
+}
+.kevin-payment-list .fields-wrapper .search-input .action.search {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.5;
+    border: 0;
+    box-shadow: none;
+    background: none;
+}
+.kevin-payment-list .fields-wrapper .search-input .action.search::before {
+    color: #757575;
+    content: '\e615';
+    font-family: 'luma-icons';
+    vertical-align: top;
+}
 .kevin-payment-list ul {
     padding: 0px;
+    max-height: 200px;
+    overflow: scroll;
+}
+.kevin-payment-list ul.show-names {
+    max-height: 250px;
 }
 .kevin-payment-list ul li {
-    border: 1px solid #cccccc;
-    padding: 5px;
     margin: 10px 5px 0px 0px;
     display: inline-block;
     width: 135px;
     cursor: pointer;
+    padding: 5px;
+    vertical-align: top;
+    line-height: 110%;
 }
 .kevin-payment-list ul li label {
     display: block;
@@ -19,7 +60,28 @@
 .kevin-payment-list ul li img {
     cursor: pointer;
     width: 100%;
+    border: 1px solid #cccccc;
 }
-.kevin-payment-list ul li.active {
+.kevin-payment-list ul li.active img {
     border: 1px solid #000;
+}
+.kevin-payment-list ul li span.title {
+    font-size: 13px;
+}
+
+@media only screen and (max-width: 767px) {
+    .kevin-payment-list .fields-wrapper .text-input {
+        display: block;
+        margin: 0px;
+        width: 100%;
+    }
+    .kevin-payment-list .fields-wrapper .country-input {
+        margin-bottom: 15px;
+    }
+    .kevin-payment-list ul {
+        max-height: 355px;
+    }
+    .kevin-payment-list ul.show-names {
+        max-height: 430px;
+    }
 }

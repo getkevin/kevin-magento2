@@ -87,6 +87,9 @@ class Adapter
             'description' => sprintf(__('Order'). ' %s', $order->getIncrementId()),
             'currencyCode' => $order->getOrderCurrency()->ToString(),
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
+            'identifier' => [
+                'email' => $order->getCustomerEmail()
+            ],
             'bankPaymentMethod' => [
                 'endToEndId' => $order->getIncrementId(),
                 'creditorName' => $this->config->getCompanyName() ? $this->config->getCompanyName() : '',
@@ -122,14 +125,13 @@ class Adapter
      * @param $amount
      * @return array
      */
-    public function initRefund($payment, $amount){
-        $paymentid = $payment->getLastTransId();
+    public function initRefund($transactionId, $amount){
         $params = [
             'amount' => $amount,
             'Webhook-URL' => $this->storeManager->getStore()->getBaseUrl().'kevin/payment/notify'
         ];
 
-        $response = $this->api->initRefund($paymentid, $params);
+        $response = $this->api->initRefund($transactionId, $params);
 
         return $response;
     }

@@ -25,36 +25,47 @@
                     <validate>required-entry</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="payment_list" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="signature" translate="label" type="obscure" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Endpoint Secret</label>
+                    <validate>required-entry</validate>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Your secret signature. Your can get it in kevin. platform console.</comment>
+                </field>
+                <field id="payment_list" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>List of Payments</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Show all available payment methods separately in checkout</comment>
                 </field>
-                <field id="redirect_preferred" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="5" translate="label" type="select">
+                <field id="show_name" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="7" translate="label" type="select">
+                    <label>Bank/Card Name</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Show name below the payment logo</comment>
+                </field>
+                <field id="redirect_preferred" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="8" translate="label" type="select">
                     <label>Redirect Preferred</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Tpp can specify this param to skip all possible kevin. parts and make user payment confirm flow mostly on the bank side.</comment>
                 </field>
-                <field id="order_status" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="6" translate="label" type="select">
+                <field id="order_status" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="9" translate="label" type="select">
                     <label>New Order Status</label>
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                 </field>
-                <field id="company_name" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="7" translate="label" type="text">
+                <field id="company_name" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
                     <label>Company Name</label>
                 </field>
-                <field id="company_bank_account" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="8" translate="label" type="text">
+                <field id="company_bank_account" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="11" translate="label" type="text">
                     <label>Company Bank Account</label>
                 </field>
-                <field id="allowspecific" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="allowspecific">
+                <field id="allowspecific" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="12" translate="label" type="allowspecific">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="11" translate="label" type="multiselect">
+                <field id="specificcountry" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="13" translate="label" type="multiselect">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="sort_order" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="12" translate="label" type="text">
+                <field id="sort_order" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="14" translate="label" type="text">
                     <label>Sort Order</label>
                 </field>
             </group>

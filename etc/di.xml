@@ -62,4 +62,9 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Sales\Model\ResourceModel\Order\Handler\State">
+        <plugin name="kevin_order_state_plugin"
+                type="Kevin\Payment\Plugin\Sales\Order\Handler\State"/>
+    </type>
 </config>

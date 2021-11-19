@@ -57,11 +57,42 @@ class Kevin
     /**
      * @return array
      */
+    public function getProjectSettings(){
+        try {
+            $methods = $this->getClient()->auth()->getProjectSettings();
+
+            //echo "<pre>";
+            //print_r($methods); die;
+
+            return $methods;
+        } catch (\Exception $exception) {
+            return [];
+        }
+    }
+
+    /**
+     * @return array|mixed|void
+     */
+    public function getAllowedRefund(){
+        try {
+            $settings = $this->getProjectSettings();
+            if(isset($settings['allowedRefundsFor'])){
+                return $settings['allowedRefundsFor'];
+            }
+            return [];
+        } catch (\Exception $exception) {
+            return [];
+        }
+    }
+
+    /**
+     * @return array
+     */
     public function getPaymentMethods(){
         try {
-            $methods = $this->getClient()->auth()->getPaymentMethods();
-            if(isset($methods['data'])){
-                return $methods['data'];
+            $settings = $this->getProjectSettings();
+            if(isset($settings['paymentMethods'])){
+                return $settings['paymentMethods'];
             }
         } catch (\Exception $exception) {
             return [];

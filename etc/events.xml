@@ -3,4 +3,8 @@
     <event name="payment_method_assign_data">
         <observer name="kevin_payment_data_assign" instance="Kevin\Payment\Observer\DataAssignObserver" />
     </event>
+
+    <event name="sales_order_creditmemo_refund">
+        <observer name="kevin_sales_order_creditmemo_refund" instance="Kevin\Payment\Observer\PaymentRefundObserver" />
+    </event>
 </config>

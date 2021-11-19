@@ -12,26 +12,104 @@ define([
         defaults: {
             template: 'Kevin_Payment/payment/kevin',
             isBankInputVisible: false,
-            redirectAfterPlaceOrder: false
+            redirectAfterPlaceOrder: false,
+            configBankList: window.checkoutConfig.payment.kevin_payment.banks,
+            configCountryList: window.checkoutConfig.payment.kevin_payment.countries,
+            configShowBankName: window.checkoutConfig.payment.kevin_payment.show_name,
+            configShowBankList: window.checkoutConfig.payment.kevin_payment.show_banks,
+            availableCountries: ko.observableArray([]),
+            availableBanks: ko.observableArray([]),
+            selectedCountry: ko.observable(),
+            searchText: ko.observable(),
+            showSearch: ko.observable(false)
+        },
+
+        initialize: function (config) {
+            this._super();
+            var self = this;
+
+            self.availableCountries(self.configCountryList);
+
+            if(quote.shippingAddress()) {
+                var countryId = quote.shippingAddress().countryId
+
+                if(countryId != 'undefined'){
+                    self.selectedCountry(countryId);
+
+                    var bankList = self.getBanks(countryId);
+                    self.availableBanks(bankList);
+
+                    if(bankList.length){
+                        self.showSearch(true);
+                    }
+                }
+            }
+
+            /*self.availableBanks.subscribe(function(list) {
+                if(list.length){
+                    self.showSearch(true);
+                } else {
+                    self.showSearch(false);
+                }
+            }); */
+
+            self.selectedCountry.subscribe(function(value) {
+                if(value) {
+                    var bankList = self.getBanks(value);
+                    self.availableBanks(bankList);
+                }
+            });
+
+            self.searchText.subscribe(function(value) {
+                var bankList = self.searchBank(value);
+                self.availableBanks(bankList);
+            });
+
+            quote.shippingAddress.subscribe(function(address) {
+                var countryId = address.countryId
+
+                if(countryId != 'undefined'){
+                    self.selectedCountry(countryId);
+                    self.availableBanks(self.getBanks(countryId));
+                }
+            });
         },
 
         showBanks: function() {
-            return window.checkoutConfig.payment.kevin_payment.show_banks && this.getBanks().length;
+            return this.configShowBankList && this.availableBanks().length;
         },
 
-        getBanks: function() {
+        showSelectionElem: function() {
+            return this.configShowBankList;
+        },
+
+        showBankName: function() {
+            return this.configShowBankName;
+        },
+
+        searchBank: function(search){
+            var banks = this.getBanks(this.selectedCountry());
+
+            if(search){
+                return banks.filter(function(item) {
+                    return item.title.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+                });
+            } else {
+                return banks;
+            }
+        },
+
+        getBanks: function(countryId) {
             var activeList = [];
-            if(quote.shippingAddress()){
-                var countryId = quote.shippingAddress().countryId
-                if(countryId){
-                    var bankList = window.checkoutConfig.payment.kevin_payment.banks;
-                    if(bankList) {
-                        if (bankList[countryId] != undefined) {
-                            activeList = bankList[countryId];
-                        }
-                        if(bankList['card'] != undefined){
-                            activeList = activeList.concat(bankList['card']);
-                        }
+            if(countryId){
+                var bankList = this.configBankList;
+                if(bankList) {
+                    if(bankList['card'] != undefined){
+                        activeList = activeList.concat(bankList['card']);
+                    }
+
+                    if (bankList[countryId] != undefined) {
+                        activeList = activeList.concat(bankList[countryId]);
                     }
                 }
             }
