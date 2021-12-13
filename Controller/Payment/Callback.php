@@ -41,14 +41,19 @@ class Callback extends \Magento\Framework\App\Action\Action
     protected $logger;
 
     /**
-     * Callback constructor.
+     * @var \Kevin\Payment\Helper\Data
+     */
+    protected $kevinHelper;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Kevin\Payment\Model\Adapter $adapter
+     * @param KevinAdapter $adapter
      * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
      * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
      * @param \Magento\Framework\DB\Transaction $transaction
      * @param \Kevin\Payment\Logger\Logger $logger
+     * @param \Kevin\Payment\Helper\Data $kevinHelper
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -57,7 +62,8 @@ class Callback extends \Magento\Framework\App\Action\Action
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender,
         \Magento\Framework\DB\Transaction $transaction,
-        \Kevin\Payment\Logger\Logger $logger
+        \Kevin\Payment\Logger\Logger $logger,
+        \Kevin\Payment\Helper\Data $kevinHelper
     ) {
         $this->api = $api;
         $this->adapter = $adapter;
@@ -65,6 +71,7 @@ class Callback extends \Magento\Framework\App\Action\Action
         $this->invoiceSender = $invoiceSender;
         $this->transaction = $transaction;
         $this->logger = $logger;
+        $this->kevinHelper = $kevinHelper;
 
         parent::__construct($context);
     }
@@ -81,7 +88,13 @@ class Callback extends \Magento\Framework\App\Action\Action
      */
     public function execute(){
         $statusGroup = $this->getRequest()->getParam('statusGroup');
+        $order = $this->_getCheckout()->getLastRealOrder();
         $success = false;
+
+        if ($order->getId()) {
+            $order->addStatusToHistory($order->getStatus(), __('Customer came back to the store.'));
+            $order->save();
+        }
 
         switch($statusGroup) {
             case KevinAdapter::PAYMENT_STATUS_GROUP_STARTED:
@@ -101,6 +114,11 @@ class Callback extends \Magento\Framework\App\Action\Action
         }
 
         if($success){
+            if ($order->getId()) {
+                $quoteId = $order->getQuoteId();
+                $this->kevinHelper->setQuoteInactive($quoteId);
+            }
+
             $this->_redirect('checkout/onepage/success');
         } else {
             $this->_getCheckout()->restoreQuote();

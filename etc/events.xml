@@ -7,4 +7,8 @@
     <event name="sales_order_creditmemo_refund">
         <observer name="kevin_sales_order_creditmemo_refund" instance="Kevin\Payment\Observer\PaymentRefundObserver" />
     </event>
+
+    <event name="sales_model_service_quote_submit_success">
+        <observer name="kevin_sales_model_service_quote_submit_success" instance="Kevin\Payment\Observer\QuoteSubmitSuccess" />
+    </event>
 </config>

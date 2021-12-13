@@ -19,9 +19,7 @@
                 <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
                 <group>offline</group>
                 <sort_order>1</sort_order>
-                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
-                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <signature backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <model>KevinPaymentFacade</model>
             </kevin_payment>
