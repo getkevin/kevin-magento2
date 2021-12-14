@@ -3,6 +3,7 @@
 namespace Kevin\Payment\Api;
 
 use Kevin\Client;
+use Kevin\SecurityManager;
 
 /**
  * Class Kevin
@@ -10,6 +11,11 @@ use Kevin\Client;
  */
 class Kevin
 {
+    /**
+     * Signature verify timeout in milliseconds
+     */
+    const SIGNATURE_VERIFY_TIMEOUT = 300000;
+
     /**
      * @var \Kevin\Payment\Gateway\Config\Config
      */
@@ -224,6 +230,25 @@ class Kevin
             if(isset($response['data'])){
                 return $response['data'];
             }
+        } catch (\Exception $exception) {
+            throw new \Exception($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param $endpointSecret
+     * @param $requestBody
+     * @param $headers
+     * @param $webhookUrl
+     * @return mixed
+     * @throws \Exception
+     */
+    public function verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl){
+        try {
+            $timestampTimeout = self::SIGNATURE_VERIFY_TIMEOUT;
+            $isValid = SecurityManager::verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl, $timestampTimeout);
+
+            return $isValid;
         } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }

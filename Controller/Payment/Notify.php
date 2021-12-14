@@ -138,25 +138,10 @@ class Notify extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $body = $this->getRequest()->getContent();
-
         if($body) {
             $response = Json::decode($body, true);
             if (!empty($response)) {
                 $this->logger->info('Callback Body: '.$body);
-
-                $timestamp = $this->getRequest()->getHeader('X-Kevin-Timestamp');
-                $kevinSignature = $this->getRequest()->getHeader('X-Kevin-Signature');
-                $method = $this->getRequest()->getMethod();
-                $url = $this->getRequest()->getUriString();
-                //$signature = $this->config->getSignature();
-
-                $this->logger->info('Callback Body: '.$body);
-                $this->logger->info($timestamp);
-                $this->logger->info($kevinSignature);
-                $this->logger->info($method);
-                $this->logger->info($url);
-
-                $signData = $method.$url.$timestamp.$body;
 
                 if ($response['id']) {
                     $paymentId = $response['id'];
@@ -171,9 +156,10 @@ class Notify extends \Magento\Framework\App\Action\Action
                                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                                 $order->getStoreId()
                             );
-                            //echo $signature; die('aaa');
-                            $generateSign = hash_hmac('sha256', $signData, $signature);
-                            if($generateSign == $kevinSignature) {
+                            $headers = getallheaders();
+                            $webhookUrl = $this->getRequest()->getUriString();
+                            $isValid = $this->api->verifySignature($signature, $body, $headers, $webhookUrl);
+                            if($isValid) {
                                 //emulate environment to get specific store config data
                                 $this->emulation->startEnvironmentEmulation($order->getStoreId());
 
@@ -228,7 +214,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         }
                                     } elseif ($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
                                         try {
-                                           if ($order->canInvoice()) {
+                                            if ($order->canInvoice()) {
                                                 //Save bank if not saved before
                                                 $payment = $order->getPayment();
                                                 if (!$payment->getAdditionalInformation('bank_code') || !$payment->getAdditionalInformation('bank_name')) {
@@ -283,7 +269,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                                 $this->invoiceSender->send($invoice);
 
                                                 $this->getResponse()->setBody('Signatures match.');
-                                           }
+                                            }
                                         } catch (\Exception $exc) {
                                             $this->getResponse()->setHttpResponseCode(400);
                                             $this->getResponse()->setBody($exc->getMessage());
