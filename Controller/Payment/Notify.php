@@ -76,6 +76,11 @@ class Notify extends \Magento\Framework\App\Action\Action
     protected $creditmemoDelete;
 
     /**
+     * @var \Kevin\Payment\Helper\Data
+     */
+    protected $kevinHelper;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Kevin\Payment\Api\Kevin $api
@@ -90,6 +95,7 @@ class Notify extends \Magento\Framework\App\Action\Action
      * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Kevin\Payment\Model\Creditmemo\Delete $creditmemoDelete
+     * @param \Kevin\Payment\Helper\Data $kevinHelper
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -105,7 +111,8 @@ class Notify extends \Magento\Framework\App\Action\Action
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Kevin\Payment\Model\Creditmemo\Delete $creditmemoDelete
+        \Kevin\Payment\Model\Creditmemo\Delete $creditmemoDelete,
+        \Kevin\Payment\Helper\Data $kevinHelper
     ) {
         $this->api = $api;
         $this->orderFactory = $orderFactory;
@@ -120,6 +127,7 @@ class Notify extends \Magento\Framework\App\Action\Action
         $this->creditmemoRepository = $creditmemoRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->creditmemoDelete = $creditmemoDelete;
+        $this->kevinHelper = $kevinHelper;
 
         parent::__construct($context);
     }
@@ -130,18 +138,10 @@ class Notify extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $body = $this->getRequest()->getContent();
-
         if($body) {
             $response = Json::decode($body, true);
             if (!empty($response)) {
                 $this->logger->info('Callback Body: '.$body);
-
-                $timestamp = $this->getRequest()->getHeader('X-Kevin-Timestamp');
-                $kevinSignature = $this->getRequest()->getHeader('X-Kevin-Signature');
-                $method = $this->getRequest()->getMethod();
-                $url = $this->getRequest()->getUriString();
-
-                $signData = $method.$url.$timestamp.$body;
 
                 if ($response['id']) {
                     $paymentId = $response['id'];
@@ -156,9 +156,10 @@ class Notify extends \Magento\Framework\App\Action\Action
                                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                                 $order->getStoreId()
                             );
-
-                            $generateSign = hash_hmac('sha256', $signData, $signature);
-                            if($generateSign == $kevinSignature) {
+                            $headers = getallheaders();
+                            $webhookUrl = $this->getRequest()->getUriString();
+                            $isValid = $this->api->verifySignature($signature, $body, $headers, $webhookUrl);
+                            if($isValid) {
                                 //emulate environment to get specific store config data
                                 $this->emulation->startEnvironmentEmulation($order->getStoreId());
 
@@ -173,6 +174,9 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         }
                                         $order->addStatusToHistory($order->getStatus(), sprintf('Refund transaction "%s" completed', $paymentId));
                                         $order->save();
+
+                                        $quoteId = $order->getQuoteId();
+                                        $this->kevinHelper->setQuoteInactive($quoteId);
 
                                         return $this->getResponse()->setBody(sprintf('Payment with ID "%s" was refunded', $paymentId));
                                     } elseif($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_ERROR) {
@@ -210,7 +214,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         }
                                     } elseif ($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
                                         try {
-                                           if ($order->canInvoice()) {
+                                            if ($order->canInvoice()) {
                                                 //Save bank if not saved before
                                                 $payment = $order->getPayment();
                                                 if (!$payment->getAdditionalInformation('bank_code') || !$payment->getAdditionalInformation('bank_name')) {
@@ -265,7 +269,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                                 $this->invoiceSender->send($invoice);
 
                                                 $this->getResponse()->setBody('Signatures match.');
-                                           }
+                                            }
                                         } catch (\Exception $exc) {
                                             $this->getResponse()->setHttpResponseCode(400);
                                             $this->getResponse()->setBody($exc->getMessage());
@@ -297,10 +301,6 @@ class Notify extends \Magento\Framework\App\Action\Action
         }
     }
 
-    /**
-     * @param $txnId
-     * @return mixed|void
-     */
     public function getCreditMemoByTxnId($txnId){
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('transaction_id', $txnId)
@@ -316,11 +316,6 @@ class Notify extends \Magento\Framework\App\Action\Action
         }
     }
 
-    /**
-     * @param $paymentId
-     * @return bool
-     * @throws \Exception
-     */
     public function isRefundCompleted($paymentId){
         $refunds = $this->api->getRefunds($paymentId);
         foreach($refunds as $refund){
