@@ -7,6 +7,9 @@ namespace Kevin\Payment\Gateway\Config;
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
+    const CONFIG_PATH_STATUS = 'payment/kevin_payment/status';
+    const CONFIG_PATH_COUNTRY_LIST = 'payment/kevin_payment/country_list';
+
     /**
      * @var \Magento\Framework\Module\ResourceInterface
      */
@@ -23,23 +26,38 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     protected $scopeConfig;
 
     /**
-     * Config constructor.
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     */
+    protected $configWriter;
+
+    /**
+     * @var \Magento\Framework\Serialize\Serializer\Json
+     */
+    protected $serialize;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Module\ResourceInterface $moduleResource
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
-     * @param string|null $methodCode
-     * @param string $pathPattern
+     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\Framework\Serialize\Serializer\Json $serialize
+     * @param $methodCode
+     * @param $pathPattern
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Module\ResourceInterface $moduleResource,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
+        \Magento\Framework\Serialize\Serializer\Json $serialize,
         $methodCode = null,
         $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->moduleResource = $moduleResource;
         $this->productMetadata = $productMetadata;
+        $this->configWriter = $configWriter;
+        $this->serialize = $serialize;
 
         //if we DI this class directly to our other components we need this to be initiated
         //in all other case it is initiated trough di.xml
@@ -50,6 +68,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $this->methodCode = $methodCode;
 
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus(){
+        return $this->getValue('status');
     }
 
     /**
@@ -84,18 +109,35 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @return mixed
      */
     public function getRedirectPreferred(){
-        return (int) $this->getValue('redirect_preferred');
+        return (int) $this->getValue('extra_settings/redirect_preferred');
     }
 
+    /**
+     * @return int
+     */
     public function getShowPaymentName(){
-        return (int) $this->getValue('show_name');
+        return (int) $this->getValue('extra_settings/show_name');
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountryList(){
+        return (int) $this->getValue('extra_settings/show_country_list');
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaymentSearch(){
+        return (int) $this->getValue('extra_settings/show_search');
     }
 
     /**
      * @return mixed
      */
     public function getPaymentList(){
-        return (int) $this->getValue('payment_list');
+        return (int) $this->getValue('extra_settings/payment_list');
     }
 
     /**
@@ -104,7 +146,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getCompanyName(){
 
         $search = array('~','`','/','!','@','#','¬','£','$','%','^','&','(',')','_','=','{','}','[',']',':',';',',','<','>','+','?');
-        $company = str_replace($search, '', $this->getValue('company_name'));
+        $company = str_replace($search, '', $this->getValue('default_bank/company_name'));
         return $company;
     }
 
@@ -112,7 +154,22 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @return mixed
      */
     public function getCompanyBankAccount(){
-        return $this->getValue('company_bank_account');
+        return $this->getValue('default_bank/company_bank_account');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionalBankAccounts(){
+        $value = $this->getValue('additional_bank/additional_bank_list');
+        return $value ? $this->serialize->unserialize($value) : '';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKevinCountryList(){
+        return $this->getValue('country_list');
     }
 
     /**
@@ -124,5 +181,23 @@ class Config extends \Magento\Payment\Gateway\Config\Config
             'pluginPlatform' => 'Magento 2',
             'pluginPlatformVersion' => $this->productMetadata->getVersion()
         ];
+    }
+
+    /**
+     * Set module status
+     * @param bool $status
+     */
+    public function setStatus($status)
+    {
+        $this->configWriter->save( self::CONFIG_PATH_STATUS, $status);
+    }
+
+    /**
+     * @param $countryList
+     * @return void
+     */
+    public function setCountryList($countryList)
+    {
+        $this->configWriter->save( self::CONFIG_PATH_COUNTRY_LIST, $countryList);
     }
 }

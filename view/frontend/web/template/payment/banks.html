@@ -2,12 +2,14 @@
     <h3 data-bind="i18n: 'Payment methods'"></h3>
 
     <div class="fields-wrapper">
+        <!-- ko if: showCountryList() -->
         <div class="text-input country-input">
             <select data-bind="options: availableCountries,
                            optionsText: 'label',
                            optionsValue: 'value',
                            optionsCaption: $t('Select bank country'), value: selectedCountry" name="country"></select>
         </div>
+        <!-- /ko -->
 
         <div class="text-input search-input" data-bind="visible: showSearch">
             <input type="search" data-bind="value: searchText, valueUpdate: 'afterkeydown', attr: {placeholder: $t('Search for a bank...')}" />

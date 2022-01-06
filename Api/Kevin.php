@@ -45,11 +45,11 @@ class Kevin
     }
 
     /**
-     * @return Client
-     * @throws \Kevin\KevinException
+     * @param $clientId
+     * @param $clientSecret
+     * @return Client|void
      */
-    public function getClient()
-    {
+    public function getConnection($clientId = null, $clientSecret = null){
         $options = [
             'error' => 'exception',
             'version' => '0.3'
@@ -57,7 +57,24 @@ class Kevin
 
         $options = array_merge($options, $this->config->getSystemData());
 
-        return new \Kevin\Client($this->config->getClientId(), $this->config->getClientSecret(), $options);
+        try {
+            return new \Kevin\Client($clientId, $clientSecret, $options);
+        } catch (\Exception $e){
+            echo $e->getMessage(); die;
+        }
+    }
+
+    /**
+     * @return Client
+     * @throws \Kevin\KevinException
+     */
+    public function getClient()
+    {
+        $clientId = $this->config->getClientId();
+        $clientSecret = $this->config->getClientSecret();
+
+        $client = $this->getConnection($clientId, $clientSecret);
+        return $client;
     }
 
     /**
@@ -66,9 +83,6 @@ class Kevin
     public function getProjectSettings(){
         try {
             $methods = $this->getClient()->auth()->getProjectSettings();
-
-            //echo "<pre>";
-            //print_r($methods); die;
 
             return $methods;
         } catch (\Exception $exception) {
@@ -198,7 +212,10 @@ class Kevin
         try {
             $kevinAuth = $this->getClient()->auth();
             $response = $kevinAuth->getCountries();
-            return $response;
+
+            if(isset($response['data'])){
+                return $response['data'];
+            }
         } catch (\Exception $exception) {
             return [];
         }

@@ -2,6 +2,8 @@
 
 namespace Kevin\Payment\Model;
 
+use Kevin\Payment\Model\Ui\ConfigProvider;
+
 /**
  * Class Adapter
  * @package Kevin\Payment\Model
@@ -81,6 +83,9 @@ class Adapter
     public function initPayment($order){
         $additionalInformation = $order->getPayment()->getAdditionalInformation();
 
+        $companyName = $this->config->getCompanyName();
+        $companyBankAccount = $this->config->getCompanyBankAccount();
+
         $params = [
             'Redirect-URL' => $this->url->getUrl('kevin/payment/callback'),
             'Webhook-URL' => $this->url->getUrl('kevin/payment/notify'),
@@ -89,17 +94,21 @@ class Adapter
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
             'identifier' => [
                 'email' => $order->getCustomerEmail()
-            ],
-            'bankPaymentMethod' => [
-                'endToEndId' => $order->getIncrementId(),
-                'creditorName' => $this->config->getCompanyName() ? $this->config->getCompanyName() : '',
-                'creditorAccount' => [
-                    'iban' => $this->config->getCompanyBankAccount() ? $this->config->getCompanyBankAccount() : '',
-                ]
             ]
         ];
 
         if (!empty($additionalInformation['bank_code'])) {
+            $bankAccounts = $this->config->getAdditionalBankAccounts();
+            if($bankAccounts) {
+                foreach ($bankAccounts as $account) {
+                    if($account['bank'] == $additionalInformation['bank_code']){
+                        $companyName = $account['company'];
+                        $companyBankAccount = $account['bank_account'];
+                        break;
+                    }
+                }
+            }
+
             if($additionalInformation['bank_code'] == 'card'){
                 $params['cardPaymentMethod'] = [];
                 $params['paymentMethodPreferred'] = 'card';
@@ -112,8 +121,13 @@ class Adapter
             }
         }
 
-        //echo "<pre>";
-        //print_r($params); die;
+        $params['bankPaymentMethod'] = [
+            'endToEndId' => $order->getIncrementId(),
+            'creditorName' => $companyName,
+            'creditorAccount' => [
+                'iban' => $companyBankAccount,
+            ]
+        ];
 
         $response = $this->api->initPayment($params);
 
