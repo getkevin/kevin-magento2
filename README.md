@@ -1,10 +1,15 @@
-## Kevin_Payment
+# kevin. Magento 2 module
 
 Payments collection solution to your Magento 2 e-commerce platform.
 
 BEFORE YOU START MAKE SURE YOU HAVE RECEIVED CLIENT ID AND CLIENT SECRET FROM KEVIN.
 
-### Installation
+## Prerequisites
+
+- Magento 2.x
+- PHP 7.0 or later
+
+## Installation
 ```
 composer require getkevin/kevin-magento2
 php bin/magento setup:upgrade
