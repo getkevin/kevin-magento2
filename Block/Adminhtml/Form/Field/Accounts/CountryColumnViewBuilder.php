@@ -1,11 +1,10 @@
 <?php
-declare(strict_types=1);
 
 namespace Kevin\Payment\Block\Adminhtml\Form\Field\Accounts;
 
 use Magento\Framework\View\Element\Html\Select;
 
-class CountryColumn extends Select
+class CountryColumnViewBuilder extends Select
 {
     /**
      * @var \Kevin\Payment\Gateway\Config\Config
@@ -59,7 +58,7 @@ class CountryColumn extends Select
      *
      * @return string
      */
-    public function _toHtml(): string
+    public function _toHtml()
     {
         if (!$this->getOptions()) {
             $this->setOptions($this->getSourceOptions());
@@ -72,7 +71,7 @@ class CountryColumn extends Select
     /**
      * @return array
      */
-    private function getSourceOptions(): array
+    private function getSourceOptions()
     {
         $kevinCountries = $this->config->getKevinCountryList();
 

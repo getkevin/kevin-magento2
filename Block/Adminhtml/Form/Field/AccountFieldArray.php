@@ -1,13 +1,13 @@
 <?php
 namespace Kevin\Payment\Block\Adminhtml\Form\Field;
 
-use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\CountryColumn;
-use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\BankColumn;
+use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\CountryColumnViewBuilder;
+use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\BankColumnViewBuilder;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
-class Accounts extends AbstractFieldArray
+class AccountFieldArray extends AbstractFieldArray
 {
     /**
      * @var \Kevin\Payment\Model\PaymentMethodsFactory
@@ -18,6 +18,16 @@ class Accounts extends AbstractFieldArray
      * @var \Magento\Framework\Serialize\Serializer\Json
      */
     protected $json;
+
+    /**
+     * @var CountryColumnViewBuilder
+     */
+    protected $countryView;
+
+    /**
+     * @var BankColumnViewBuilder
+     */
+    protected $bankRenderer;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -36,16 +46,6 @@ class Accounts extends AbstractFieldArray
 
         parent::__construct($context, $data);
     }
-
-    /**
-     * @var CountryColumn
-     */
-    private $countryRenderer;
-
-    /**
-     * @var BankColumn
-     */
-    private $bankRenderer;
 
     /**
      * Prepare rendering the new field by adding all the needed columns
@@ -72,7 +72,7 @@ class Accounts extends AbstractFieldArray
      * @param DataObject $row
      * @throws LocalizedException
      */
-    protected function _prepareArrayRow(DataObject $row): void
+    protected function _prepareArrayRow(DataObject $row)
     {
         $options = [];
 
@@ -90,30 +90,30 @@ class Accounts extends AbstractFieldArray
     }
 
     /**
-     * @return CountryColumn
+     * @return CountryColumnViewBuilder
      * @throws LocalizedException
      */
     private function getCountryRenderer()
     {
-        if (!$this->countryRenderer) {
-            $this->countryRenderer = $this->getLayout()->createBlock(
-                CountryColumn::class,
+        if (!$this->countryView) {
+            $this->countryView = $this->getLayout()->createBlock(
+                CountryColumnViewBuilder::class,
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );
         }
-        return $this->countryRenderer;
+        return $this->countryView;
     }
 
     /**
-     * @return BankColumn|\Magento\Framework\View\Element\BlockInterface
+     * @return BankColumnViewBuilder|\Magento\Framework\View\Element\BlockInterface
      * @throws LocalizedException
      */
     private function getBankRenderer()
     {
         if (!$this->bankRenderer) {
             $this->bankRenderer = $this->getLayout()->createBlock(
-                BankColumn::class,
+                BankColumnViewBuilder::class,
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );

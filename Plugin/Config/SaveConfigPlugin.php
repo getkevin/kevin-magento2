@@ -88,7 +88,7 @@ class SaveConfigPlugin
                             $kevinConnection = $this->api->getConnection($clientId, $clientSecret);
                             if ($kevinMethods = $kevinConnection->auth()->getPaymentMethods()) {
                                 if (isset($kevinMethods['data'])) {
-                                    if (in_array("bank", $kevinMethods['data'])) {
+                                    if (in_array('bank', $kevinMethods['data'])) {
                                         $bankList = $kevinConnection->auth()->getBanks();
                                         $countryList = $kevinConnection->auth()->getCountries();
 
@@ -108,7 +108,6 @@ class SaveConfigPlugin
                             }
                         } catch (\Exception $e) {
                             $this->config->setStatus(0);
-                            //throw new \Magento\Framework\Exception\CouldNotSaveException(__('Kevin Payment: %1', $e->getMessage()));
                         }
                     }
                 }

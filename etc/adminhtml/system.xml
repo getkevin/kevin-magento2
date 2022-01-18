@@ -70,7 +70,7 @@
                     <label>Additional Bank Account</label>
                     <field id="additional_bank_list" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Accounts</label>
-                        <frontend_model>Kevin\Payment\Block\Adminhtml\Form\Field\Accounts</frontend_model>
+                        <frontend_model>Kevin\Payment\Block\Adminhtml\Form\Field\AccountFieldArray</frontend_model>
                         <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     </field>
                 </group>

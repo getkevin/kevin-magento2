@@ -148,12 +148,12 @@ define([
                 var terms = this.termsStatus();
                 if (bank == undefined || !bank) {
                     this.messageContainer.addErrorMessage({
-                        "message": $t("Please select payment method.")
+                        "message": $t("Please select a payment method.")
                     });
                     return false;
                 } else if(terms == undefined || !terms){
                     this.messageContainer.addErrorMessage({
-                        "message": $t("Please agree with Kevin payment terms.")
+                        "message": $t("Please agree with kevin payment terms.")
                     });
                     return false;
                 }

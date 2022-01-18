@@ -56,8 +56,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '1.1.2', '<')) {
 
-            $this->updatePaymentList();
-
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('kevin_payment_list'))
                 ->addColumn(
@@ -111,7 +109,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $installer->endSetup();
     }
 
-    public function updatePaymentList(){
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function updatePaymentList() {
         try {
             if ($this->config->getClientId() && $this->config->getClientSecret()) {
                 $kevinMethods = $this->api->getPaymentMethods();
@@ -126,6 +128,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $this->config->setStatus( true);
             }
         } catch (\Exception $e){
+            throw new \Exception($e->getMessage());
         }
     }
 }

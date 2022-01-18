@@ -59,8 +59,8 @@ class Kevin
 
         try {
             return new \Kevin\Client($clientId, $clientSecret, $options);
-        } catch (\Exception $e){
-            echo $e->getMessage(); die;
+        } catch (\Exception $exception){
+            throw new \Exception($exception->getMessage());
         }
     }
 

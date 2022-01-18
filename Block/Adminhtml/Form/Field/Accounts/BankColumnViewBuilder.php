@@ -1,11 +1,10 @@
 <?php
-declare(strict_types=1);
 
 namespace Kevin\Payment\Block\Adminhtml\Form\Field\Accounts;
 
 use Magento\Framework\View\Element\Html\Select;
 
-class BankColumn extends Select
+class BankColumnViewBuilder extends Select
 {
     /**
      * @var \Kevin\Payment\Model\PaymentMethodsFactory
@@ -54,7 +53,7 @@ class BankColumn extends Select
      *
      * @return string
      */
-    public function _toHtml(): string
+    public function _toHtml()
     {
         if (!$this->getOptions()) {
             $this->setOptions($this->getSourceOptions());
@@ -68,7 +67,7 @@ class BankColumn extends Select
     /**
      * @return array
      */
-    private function getSourceOptions(): array
+    private function getSourceOptions()
     {
         $collection = $this->paymentMethodsFactory->create()
             ->getCollection();
