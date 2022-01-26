@@ -61,7 +61,7 @@ class AccountFieldArray extends AbstractFieldArray
             'label' => __('Bank'),
             'renderer' => $this->getBankView()
         ]);
-        $this->addColumn('company', ['label' => __('Company Name'), 'class' => 'required-entry']);
+        $this->addColumn('company', ['label' => __('Company Name'), 'class' => 'required-entry validate-alphanum-with-spaces']);
         $this->addColumn('bank_account', ['label' => __('Bank Account'), 'class' => 'required-entry']);
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add');

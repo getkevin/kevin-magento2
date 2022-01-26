@@ -128,7 +128,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $this->config->setStatus(true);
             }
         } catch (\Exception $e){
-            throw new \Exception($e->getMessage());
+            echo $e->getMessage();
         }
     }
 }

@@ -144,10 +144,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @return mixed
      */
     public function getCompanyName(){
-
-        $search = array('~','`','/','!','@','#','¬','£','$','%','^','&','(',')','_','=','{','}','[',']',':',';',',','<','>','+','?');
-        $company = str_replace($search, '', $this->getValue('default_bank/company_name'));
-        return $company;
+        return $this->getValue('default_bank/company_name');
     }
 
     /**

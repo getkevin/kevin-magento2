@@ -69,15 +69,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function setQuoteInactive($quoteId)
     {
-        try {
-            $quote = $this->quoteRepository->get($quoteId);
+        $quote = $this->quoteRepository->get($quoteId);
 
-            if ($quote && $quote->getIsActive()) {
-                $quote->setIsActive(false);
-                $this->quoteRepository->save($quote);
-            }
-        } catch (\Exception $e) {
-            throw $e;
+        if ($quote && $quote->getIsActive()) {
+            $quote->setIsActive(false);
+            $this->quoteRepository->save($quote);
         }
     }
 

@@ -57,16 +57,11 @@ class Kevin
 
         $options = array_merge($options, $this->config->getSystemData());
 
-        try {
-            return new \Kevin\Client($clientId, $clientSecret, $options);
-        } catch (\Exception $exception){
-            throw new \Exception($exception->getMessage());
-        }
+        return new \Kevin\Client($clientId, $clientSecret, $options);
     }
 
     /**
-     * @return Client
-     * @throws \Kevin\KevinException
+     * @return Client|void
      */
     public function getClient()
     {
@@ -162,47 +157,28 @@ class Kevin
 
     /**
      * @param $params
-     * @return array
-     * @throws \Exception
+     * @return mixed
      */
     public function initPayment($params){
-        try {
-            $response = $this->getClient()->payment()->initPayment($params);
-
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+       return $this->getClient()->payment()->initPayment($params);
     }
 
     /**
      * @param $paymentId
      * @param $attr
-     * @return array
-     * @throws \Exception
+     * @return mixed
      */
     public function getPaymentStatus($paymentId, $attr){
-        try {
-            $response = $this->getClient()->payment()->getPaymentStatus($paymentId, $attr);
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $this->getClient()->payment()->getPaymentStatus($paymentId, $attr);
     }
 
     /**
      * @param $paymentId
      * @param $attr
-     * @return array
-     * @throws \Exception
+     * @return mixed
      */
     public function getPayment($paymentId, $attr){
-        try {
-            $response = $this->getClient()->payment()->getPayment($paymentId, $attr);
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $this->getClient()->payment()->getPayment($paymentId, $attr);
     }
 
     /**
@@ -225,30 +201,19 @@ class Kevin
      * @param $paymentId
      * @param $attr
      * @return mixed
-     * @throws \Exception
      */
     public function initRefund($paymentId, $attr){
-        try {
-            $response = $this->getClient()->payment()->initiatePaymentRefund($paymentId, $attr);
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $this->getClient()->payment()->initiatePaymentRefund($paymentId, $attr);
     }
 
     /**
      * @param $paymentId
-     * @return mixed
-     * @throws \Exception
+     * @return mixed|void
      */
     public function getRefunds($paymentId){
-        try {
-            $response = $this->getClient()->payment()->getPaymentRefunds($paymentId);
-            if(isset($response['data'])){
-                return $response['data'];
-            }
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+        $response = $this->getClient()->payment()->getPaymentRefunds($paymentId);
+        if(isset($response['data'])){
+            return $response['data'];
         }
     }
 
@@ -258,16 +223,11 @@ class Kevin
      * @param $headers
      * @param $webhookUrl
      * @return mixed
-     * @throws \Exception
      */
     public function verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl){
-        try {
-            $timestampTimeout = self::SIGNATURE_VERIFY_TIMEOUT;
-            $isValid = SecurityManager::verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl, $timestampTimeout);
+        $timestampTimeout = self::SIGNATURE_VERIFY_TIMEOUT;
+        $isValid = SecurityManager::verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl, $timestampTimeout);
 
-            return $isValid;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $isValid;
     }
 }
