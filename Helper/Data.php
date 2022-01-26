@@ -67,11 +67,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @return void
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function setQuoteInactive($quoteId){
+    public function setQuoteInactive($quoteId)
+    {
         try {
             $quote = $this->quoteRepository->get($quoteId);
 
-            if($quote && $quote->getIsActive()){
+            if ($quote && $quote->getIsActive()) {
                 $quote->setIsActive(false);
                 $this->quoteRepository->save($quote);
             }
@@ -86,10 +87,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function truncateTable($tableName)
     {
-        $connection = $this->resourceConnection->getConnection ();
-        $connection->query (
-            sprintf ( 'TRUNCATE %s',
-                $this->resourceConnection->getTableName ( $tableName )
+        $connection = $this->resourceConnection->getConnection();
+        $connection->query(
+            sprintf(
+                'TRUNCATE %s',
+                $this->resourceConnection->getTableName($tableName)
             )
         );
     }
@@ -100,18 +102,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function saveAvailablePaymentList($bankList)
     {
-        $this->truncateTable ( 'kevin_payment_list' );
+        $this->truncateTable('kevin_payment_list');
 
         if ($bankList) {
             foreach ($bankList as $bank) {
                 $description = !empty($bank['officialName']) ? $bank['officialName'] : '';
 
                 $methodModel = $this->paymentMethodsFactory->create();
-                $methodModel->setPaymentId ( $bank['id'] )
-                    ->setCountryId ( $bank['countryCode'] )
-                    ->setTitle ( $bank['name'] )
-                    ->setDescription ( $description )
-                    ->setLogoPath ( $bank['imageUri'] )
+                $methodModel->setPaymentId($bank['id'])
+                    ->setCountryId($bank['countryCode'])
+                    ->setTitle($bank['name'])
+                    ->setDescription($description)
+                    ->setLogoPath($bank['imageUri'])
                     ->save();
             }
         }
@@ -122,8 +124,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param $countryList
      * @return void
      */
-    public function saveAvailableCountryList($countryList){
-        if(!empty($countryList)) {
+    public function saveAvailableCountryList($countryList)
+    {
+        if (!empty($countryList)) {
             $countryList = implode(',', $countryList);
 
             $this->_config->setCountryList($countryList);

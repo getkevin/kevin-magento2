@@ -16,7 +16,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init (
+        $this->_init(
             \Kevin\Payment\Model\PaymentMethods::class,
             \Kevin\Payment\Model\ResourceModel\PaymentMethods::class
         );

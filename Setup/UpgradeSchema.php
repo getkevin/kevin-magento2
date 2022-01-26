@@ -119,13 +119,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $kevinMethods = $this->api->getPaymentMethods();
 
                 if (is_array($kevinMethods) && !empty($kevinMethods)) {
-                    if (in_array("bank", $kevinMethods)) {
+                    if (in_array('bank', $kevinMethods)) {
                         $this->helper->saveAvailablePaymentList($this->api->getBanks());
                         $this->helper->saveAvailableCountryList($this->api->getAvailableCountries());
                     }
                 }
 
-                $this->config->setStatus( true);
+                $this->config->setStatus(true);
             }
         } catch (\Exception $e){
             throw new \Exception($e->getMessage());

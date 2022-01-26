@@ -110,25 +110,26 @@ final class ConfigProvider implements ConfigProviderInterface
     /**
      * @return array
      */
-    public function getBanks(){
-        if($this->config->getPaymentList()) {
+    public function getBanks()
+    {
+        if ($this->config->getPaymentList()) {
 
             $kevinMethods = $this->api->getPaymentMethods();
             $paymentMethods = [];
 
-            if($kevinMethods) {
-                if (in_array("bank", $kevinMethods)) {
+            if ($kevinMethods) {
+                if (in_array('bank', $kevinMethods)) {
                     $collection = $this->paymentMethodsFactory->create()
                         ->getCollection();
 
-                    if(!$collection->getSize()) {
+                    if (!$collection->getSize()) {
                         $this->helper->saveAvailablePaymentList($this->api->getBanks());
 
                         $collection = $this->paymentMethodsFactory->create()
                             ->getCollection();
                     }
 
-                    if($collection->getSize()) {
+                    if ($collection->getSize()) {
                         foreach ($collection as $method) {
                             $subMethodCode = self::CODE . '_' . $method->getData('payment_id');
                             $countryId = $method->getData('country_id');
@@ -162,11 +163,12 @@ final class ConfigProvider implements ConfigProviderInterface
     /**
      * @return array
      */
-    public function getAvailableCountries(){
+    public function getAvailableCountries()
+    {
         $kevinCountries = $this->config->getKevinCountryList();
 
         $result = [];
-        if($kevinCountries) {
+        if ($kevinCountries) {
             $collection = $this->countryCollectionFactory->create()
                 ->loadByStore()
                 ->addFieldToFilter('iso2_code', ['in' => explode(',', $kevinCountries)]);

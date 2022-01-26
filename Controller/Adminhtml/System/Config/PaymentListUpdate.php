@@ -41,7 +41,7 @@ class PaymentListUpdate extends Action
         \Kevin\Payment\Api\Kevin $api,
         \Kevin\Payment\Helper\Data $helper,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-    )
+    ) 
     {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->api = $api;
@@ -63,8 +63,8 @@ class PaymentListUpdate extends Action
         try {
             $kevinMethods = $this->api->getPaymentMethods();
 
-            if(is_array($kevinMethods) && !empty($kevinMethods)){
-                if (in_array("bank", $kevinMethods)) {
+            if (is_array($kevinMethods) && !empty($kevinMethods)) {
+                if (in_array('bank', $kevinMethods)) {
 
                     $this->helper->saveAvailablePaymentList($this->api->getBanks());
                     $this->helper->saveAvailableCountryList($this->api->getAvailableCountries());
@@ -74,7 +74,7 @@ class PaymentListUpdate extends Action
                     $message = __('Updated');
                 }
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
         }
 
         /** @var Json $result */

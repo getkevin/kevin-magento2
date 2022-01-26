@@ -47,43 +47,39 @@ class SaveConfigPlugin
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function beforeSave (
+    public function beforeSave(
         \Magento\Config\Model\Config $subject
     ) {
-        if ( key_exists ( 'kevin_payment', $subject->getData ()[ 'groups' ] ) ) {
+        if (key_exists('kevin_payment', $subject->getData()['groups'])) {
             $enabled = null;
             $clientId = null;
             $clientSecret = null;
 
-            if(isset($subject->getData()[ 'groups' ][ 'kevin_payment' ]
-                [ 'fields' ][ 'active' ][ 'value' ])) {
-                $enabled = $subject->getData()['groups']['kevin_payment']
-                ['fields']['active']['value'];
+            if (isset($subject->getData()['groups']['kevin_payment']['fields']['active']['value'])) {
+                $enabled = $subject->getData()['groups']['kevin_payment']['fields']['active']['value'];
             }
 
-            if ( $subject->getSection () === 'payment' && $enabled) {
+            if ($subject->getSection() === 'payment' && $enabled) {
                 // client ID - new value ( not saved )
-                if(isset($subject->getData()[ 'groups' ][ 'kevin_payment' ]
-                    [ 'fields' ][ 'client_id' ][ 'value' ])) {
-                    $clientId = $subject->getData()['groups']['kevin_payment']
-                    ['fields']['client_id']['value'];
+                if (isset($subject->getData()['groups']['kevin_payment']['fields']['client_id']['value'])) {
+                    $clientId = $subject->getData()['groups']['kevin_payment']['fields']['client_id']['value'];
                 }
 
                 // Client Secret - new value ( not saved )
-                if(isset($subject->getData()[ 'groups' ][ 'kevin_payment' ]
-                    [ 'fields' ][ 'client_secret' ][ 'value' ])) {
-                    $clientSecret = $subject->getData()['groups']['kevin_payment']
-                    ['fields']['client_secret']['value'];
+                if (isset($subject->getData()['groups']['kevin_payment']['fields']['client_secret']['value'])) {
+                    $clientSecret = $subject->getData()['groups']['kevin_payment']['fields']['client_secret']['value'];
                 }
 
-                if($clientId && $clientSecret) {
+                if ($clientId && $clientSecret) {
                     if (strpos($clientSecret, '***') !== false) {
                         $clientSecret = $this->config->getClientSecret();
                     }
 
-                    if ($clientId != $this->config->getClientId()
+                    if (
+                        $clientId != $this->config->getClientId()
                         || $clientSecret != $this->config->getClientSecret()
-                        || $enabled != $this->config->getActive()) {
+                        || $enabled != $this->config->getActive()
+                    ) {
                         try {
                             $kevinConnection = $this->api->getConnection($clientId, $clientSecret);
                             if ($kevinMethods = $kevinConnection->auth()->getPaymentMethods()) {
