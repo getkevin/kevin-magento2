@@ -1,4 +1,5 @@
 <?php
+
 namespace Kevin\Payment\Block\Adminhtml\Form\Field;
 
 use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\CountryColumnViewBuilder;
@@ -27,7 +28,7 @@ class AccountFieldArray extends AbstractFieldArray
     /**
      * @var BankColumnViewBuilder
      */
-    protected $bankRenderer;
+    protected $bankView;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -40,7 +41,7 @@ class AccountFieldArray extends AbstractFieldArray
         \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory,
         \Magento\Framework\Serialize\Serializer\Json $json,
         array $data = []
-    ){
+    ) {
         $this->paymentMethodsFactory = $paymentMethodsFactory;
         $this->json = $json;
 
@@ -54,11 +55,11 @@ class AccountFieldArray extends AbstractFieldArray
     {
         $this->addColumn('country_id', [
             'label' => __('Country'),
-            'renderer' => $this->getCountryRenderer()
+            'renderer' => $this->getCountryView()
         ]);
         $this->addColumn('bank', [
             'label' => __('Bank'),
-            'renderer' => $this->getBankRenderer()
+            'renderer' => $this->getBankView()
         ]);
         $this->addColumn('company', ['label' => __('Company Name'), 'class' => 'required-entry']);
         $this->addColumn('bank_account', ['label' => __('Bank Account'), 'class' => 'required-entry']);
@@ -79,11 +80,11 @@ class AccountFieldArray extends AbstractFieldArray
         $countryId = $row->getCountryId();
         $bank = $row->getBank();
         if ($countryId !== null) {
-            $options['option_' . $this->getCountryRenderer()->calcOptionHash($countryId)] = 'selected="selected"';
+            $options['option_' . $this->getCountryView()->calcOptionHash($countryId)] = 'selected="selected"';
         }
 
         if ($bank !== null) {
-            $options['option_' . $this->getBankRenderer()->calcOptionHash($bank)] = 'selected="selected"';
+            $options['option_' . $this->getBankView()->calcOptionHash($bank)] = 'selected="selected"';
         }
 
         $row->setData('option_extra_attrs', $options);
@@ -93,7 +94,7 @@ class AccountFieldArray extends AbstractFieldArray
      * @return CountryColumnViewBuilder
      * @throws LocalizedException
      */
-    private function getCountryRenderer()
+    private function getCountryView()
     {
         if (!$this->countryView) {
             $this->countryView = $this->getLayout()->createBlock(
@@ -109,16 +110,16 @@ class AccountFieldArray extends AbstractFieldArray
      * @return BankColumnViewBuilder|\Magento\Framework\View\Element\BlockInterface
      * @throws LocalizedException
      */
-    private function getBankRenderer()
+    private function getBankView()
     {
-        if (!$this->bankRenderer) {
-            $this->bankRenderer = $this->getLayout()->createBlock(
+        if (!$this->bankView) {
+            $this->bankView = $this->getLayout()->createBlock(
                 BankColumnViewBuilder::class,
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );
         }
-        return $this->bankRenderer;
+        return $this->bankView;
     }
 
     /**
@@ -178,13 +179,14 @@ class AccountFieldArray extends AbstractFieldArray
     /**
      * @return array
      */
-    protected function getBanks(){
+    protected function getBanks()
+    {
         $collection = $this->paymentMethodsFactory->create()
             ->getCollection();
 
         $banks = [];
-        if($collection->getSize()){
-            foreach($collection as $bank){
+        if ($collection->getSize()) {
+            foreach ($collection as $bank) {
                 $countryId = $bank->getData('country_id');
                 $label = $bank->getData('description') ? $bank->getData('description') : $bank->getData('title');
                 $banks[$countryId][] = [
