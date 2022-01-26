@@ -1,0 +1,38 @@
+<script>
+    require([
+        'jquery',
+        'prototype'
+    ], function ($) {
+
+        $('#kevin_payment_button').click(function () {
+            var params = {};
+            new Ajax.Request('<?php echo $block->getAjaxUrl() ?>', {
+                parameters: params,
+                loaderArea: true,
+                asynchronous: true,
+                onCreate: function () {
+                    $('#kevin_button_success_message').text('');
+                    $('#kevin_button_error_message').text('');
+                },
+                onSuccess: function (transport) {
+                    var resultText = '';
+
+                    var response = JSON.parse(transport.responseText);
+                    if(response.error){
+                        $('#kevin_button_error_message').text(response.message);
+                    } else {
+                        $('#kevin_button_success_message').text(response.message);
+                        $('#kevin_update_date').text(response.update_date);
+                    }
+                }
+            });
+        });
+    });
+</script>
+<?php echo $block->getButtonHtml(); ?>
+<span id="kevin_button_success_message" style="font-size: 16px; color: green;"></span>
+<span id="kevin_button_error_message" style="font-size: 16px; color: green;"></span>
+
+<?php if($updateDate = $block->getLastUpdateDate()) : ?>
+<p>Last Update: <strong id="kevin_update_date"><?= $updateDate ?></strong></p>
+<?php endif; ?>

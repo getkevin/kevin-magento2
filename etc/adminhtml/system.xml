@@ -3,10 +3,14 @@
     <system>
         <section id="payment" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1000" translate="label">
             <group id="kevin_payment" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label">
-                <label>Kevin</label>
+                <label>kevin.</label>
                 <field id="version" translate="label" type="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Version</label>
                     <frontend_model>Kevin\Payment\Model\Config\Source\Version</frontend_model>
+                </field>
+                <field id="status_label" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Status</label>
+                    <comment model="\Kevin\Payment\Model\Config\Source\ModuleStatus" />
                 </field>
                 <field id="active" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label" type="select">
                     <label>Enabled</label>
@@ -28,46 +32,88 @@
                     <label>Endpoint Secret</label>
                     <validate>required-entry</validate>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                    <comment>Your secret signature. Your can get it in kevin. platform console.</comment>
-                </field>
-                <field id="payment_list" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>List of Payments</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Show all available payment methods separately in checkout</comment>
-                </field>
-                <field id="show_name" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="7" translate="label" type="select">
-                    <label>Bank/Card Name</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Show name below the payment logo</comment>
-                </field>
-                <field id="redirect_preferred" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="8" translate="label" type="select">
-                    <label>Redirect Preferred</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Tpp can specify this param to skip all possible kevin. parts and make user payment confirm flow mostly on the bank side.</comment>
+                    <comment>Your Endpoint secret. You can get it in kevin. dashboard.</comment>
                 </field>
                 <field id="order_status" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="9" translate="label" type="select">
                     <label>New Order Status</label>
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status\NewStatus</source_model>
                 </field>
-                <field id="company_name" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="text">
-                    <label>Company Name</label>
-                    <validate>required-entry validate-alphanum-with-spaces</validate>
-                </field>
-                <field id="company_bank_account" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="11" translate="label" type="text">
-                    <label>Company Bank Account</label>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="allowspecific" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="12" translate="label" type="allowspecific">
+                <field id="allowspecific" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="10" translate="label" type="allowspecific">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                 </field>
-                <field id="specificcountry" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="13" translate="label" type="multiselect">
+                <field id="specificcountry" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="11" translate="label" type="multiselect">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <can_be_empty>1</can_be_empty>
                 </field>
-                <field id="sort_order" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="14" translate="label" type="text">
+                <field id="sort_order" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="12" translate="label" type="text">
                     <label>Sort Order</label>
+                </field>
+                <group id="default_bank" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="13" translate="label">
+                    <attribute type="expanded">1</attribute>
+                    <label>Default Bank Account</label>
+                    <field id="company_name" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label" type="text">
+                        <label>Company Name</label>
+                        <validate>required-entry validate-alphanum-with-spaces</validate>
+                    </field>
+                    <field id="company_bank_account" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="2" translate="label" type="text">
+                        <label>Company Bank Account</label>
+                        <validate>required-entry</validate>
+                    </field>
+                </group>
+                <group id="additional_bank" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="14" translate="label">
+                    <depends>
+                        <field id="*/*/status">1</field>
+                    </depends>
+                    <attribute type="expanded">1</attribute>
+                    <label>Additional Bank Account</label>
+                    <field id="additional_bank_list" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Accounts</label>
+                        <frontend_model>Kevin\Payment\Block\Adminhtml\Form\Field\AccountFieldArray</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    </field>
+                </group>
+                <group id="extra_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="15" translate="label">
+                    <depends>
+                        <field id="*/*/status">1</field>
+                    </depends>
+                    <attribute type="expanded">1</attribute>
+                    <label>Extra Settings</label>
+                    <field id="payment_list" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>List of Payments</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Show all available payment methods separately in checkout</comment>
+                    </field>
+                    <field id="payment_list_update" translate="label" type="button" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Payment List Manual Update</label>
+                        <frontend_model>Kevin\Payment\Block\Adminhtml\System\Config\PaymentListButton</frontend_model>
+                    </field>
+                    <field id="show_name" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="3" translate="label" type="select">
+                        <label>Bank/Card Name</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Show name below the payment logo</comment>
+                    </field>
+                    <field id="show_country_list" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="4" translate="label" type="select">
+                        <label>Country List</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Show country list on checkout page</comment>
+                    </field>
+                    <field id="show_search" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="5" translate="label" type="select">
+                        <label>Bank Search</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Show payment method search on checkout page</comment>
+                    </field>
+                    <field id="redirect_preferred" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="6" translate="label" type="select">
+                        <label>Redirect Preferred</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Tpp can specify this param to skip all possible kevin. parts and make user payment confirm flow mostly on the bank side.</comment>
+                    </field>
+                </group>
+                <field id="status" translate="label" type="hidden" sortOrder="999" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <depends> <!-- just hidden field adding random depend value so the scope will be hidden -->
+                        <field id="*/*/specificcountry">AA</field>
+                    </depends>
                 </field>
             </group>
         </section>

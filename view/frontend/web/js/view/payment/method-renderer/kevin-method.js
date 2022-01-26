@@ -17,11 +17,15 @@ define([
             configCountryList: window.checkoutConfig.payment.kevin_payment.countries,
             configShowBankName: window.checkoutConfig.payment.kevin_payment.show_name,
             configShowBankList: window.checkoutConfig.payment.kevin_payment.show_banks,
+            configShowCountryList: window.checkoutConfig.payment.kevin_payment.show_country_list,
+            configShowSearch: window.checkoutConfig.payment.kevin_payment.show_search,
             availableCountries: ko.observableArray([]),
             availableBanks: ko.observableArray([]),
             selectedCountry: ko.observable(),
             searchText: ko.observable(),
-            showSearch: ko.observable(false)
+            showSearch: ko.observable(false),
+            termsStatus: ko.observable(false),
+            termText: $t("I have read and agree with the <a href=\"https://kevin.eu/terms-conditions/\" target=\"_blank\">payment terms</a> and <a href=\"https://kevin.eu/privacy-policy/\" target=\"_blank\">privacy policy</a> of Kevin EU, UAB")
         },
 
         initialize: function (config) {
@@ -39,7 +43,7 @@ define([
                     var bankList = self.getBanks(countryId);
                     self.availableBanks(bankList);
 
-                    if(bankList.length){
+                    if(bankList.length && self.configShowSearch){
                         self.showSearch(true);
                     }
                 }
@@ -77,6 +81,10 @@ define([
 
         showBanks: function() {
             return this.configShowBankList && this.availableBanks().length;
+        },
+
+        showCountryList: function() {
+            return this.configShowCountryList && this.showBanks();
         },
 
         showSelectionElem: function() {
@@ -137,9 +145,15 @@ define([
         validate: function() {
             if (this.showBanks()) {
                 var bank = this.getSelectedBankCode();
+                var terms = this.termsStatus();
                 if (bank == undefined || !bank) {
                     this.messageContainer.addErrorMessage({
-                        "message": $t("Please select payment method.")
+                        "message": $t("Please select a payment method.")
+                    });
+                    return false;
+                } else if(terms == undefined || !terms){
+                    this.messageContainer.addErrorMessage({
+                        "message": $t("Please agree with kevin payment terms.")
                     });
                     return false;
                 }

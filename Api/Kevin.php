@@ -45,11 +45,11 @@ class Kevin
     }
 
     /**
-     * @return Client
-     * @throws \Kevin\KevinException
+     * @param $clientId
+     * @param $clientSecret
+     * @return Client|void
      */
-    public function getClient()
-    {
+    public function getConnection($clientId = null, $clientSecret = null){
         $options = [
             'error' => 'exception',
             'version' => '0.3'
@@ -57,7 +57,19 @@ class Kevin
 
         $options = array_merge($options, $this->config->getSystemData());
 
-        return new \Kevin\Client($this->config->getClientId(), $this->config->getClientSecret(), $options);
+        return new \Kevin\Client($clientId, $clientSecret, $options);
+    }
+
+    /**
+     * @return Client|void
+     */
+    public function getClient()
+    {
+        $clientId = $this->config->getClientId();
+        $clientSecret = $this->config->getClientSecret();
+
+        $client = $this->getConnection($clientId, $clientSecret);
+        return $client;
     }
 
     /**
@@ -66,9 +78,6 @@ class Kevin
     public function getProjectSettings(){
         try {
             $methods = $this->getClient()->auth()->getProjectSettings();
-
-            //echo "<pre>";
-            //print_r($methods); die;
 
             return $methods;
         } catch (\Exception $exception) {
@@ -148,47 +157,28 @@ class Kevin
 
     /**
      * @param $params
-     * @return array
-     * @throws \Exception
+     * @return mixed
      */
     public function initPayment($params){
-        try {
-            $response = $this->getClient()->payment()->initPayment($params);
-
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+       return $this->getClient()->payment()->initPayment($params);
     }
 
     /**
      * @param $paymentId
      * @param $attr
-     * @return array
-     * @throws \Exception
+     * @return mixed
      */
     public function getPaymentStatus($paymentId, $attr){
-        try {
-            $response = $this->getClient()->payment()->getPaymentStatus($paymentId, $attr);
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $this->getClient()->payment()->getPaymentStatus($paymentId, $attr);
     }
 
     /**
      * @param $paymentId
      * @param $attr
-     * @return array
-     * @throws \Exception
+     * @return mixed
      */
     public function getPayment($paymentId, $attr){
-        try {
-            $response = $this->getClient()->payment()->getPayment($paymentId, $attr);
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $this->getClient()->payment()->getPayment($paymentId, $attr);
     }
 
     /**
@@ -198,7 +188,10 @@ class Kevin
         try {
             $kevinAuth = $this->getClient()->auth();
             $response = $kevinAuth->getCountries();
-            return $response;
+
+            if(isset($response['data'])){
+                return $response['data'];
+            }
         } catch (\Exception $exception) {
             return [];
         }
@@ -208,30 +201,19 @@ class Kevin
      * @param $paymentId
      * @param $attr
      * @return mixed
-     * @throws \Exception
      */
     public function initRefund($paymentId, $attr){
-        try {
-            $response = $this->getClient()->payment()->initiatePaymentRefund($paymentId, $attr);
-            return $response;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $this->getClient()->payment()->initiatePaymentRefund($paymentId, $attr);
     }
 
     /**
      * @param $paymentId
-     * @return mixed
-     * @throws \Exception
+     * @return mixed|void
      */
     public function getRefunds($paymentId){
-        try {
-            $response = $this->getClient()->payment()->getPaymentRefunds($paymentId);
-            if(isset($response['data'])){
-                return $response['data'];
-            }
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+        $response = $this->getClient()->payment()->getPaymentRefunds($paymentId);
+        if(isset($response['data'])){
+            return $response['data'];
         }
     }
 
@@ -241,16 +223,11 @@ class Kevin
      * @param $headers
      * @param $webhookUrl
      * @return mixed
-     * @throws \Exception
      */
     public function verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl){
-        try {
-            $timestampTimeout = self::SIGNATURE_VERIFY_TIMEOUT;
-            $isValid = SecurityManager::verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl, $timestampTimeout);
+        $timestampTimeout = self::SIGNATURE_VERIFY_TIMEOUT;
+        $isValid = SecurityManager::verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl, $timestampTimeout);
 
-            return $isValid;
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        return $isValid;
     }
 }

@@ -25,6 +25,10 @@
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
+            <div class="kevin-terms">
+                <input type="checkbox" id="kevin-terms" name="kevin-terms" value="" data-bind='checked: termsStatus'/>
+                <label for="kevin-terms" data-bind="html: termText"></label>
+            </div>
         </div>
         <div class="actions-toolbar">
             <div class="primary">
