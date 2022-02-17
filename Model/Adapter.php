@@ -89,7 +89,7 @@ class Adapter
         $params = [
             'Redirect-URL' => $this->url->getUrl('kevin/payment/callback'),
             'Webhook-URL' => $this->url->getUrl('kevin/payment/notify'),
-            'description' => sprintf(__('Order'). ' %s', $order->getIncrementId()),
+            'description' => sprintf('Order %s', $order->getIncrementId()),
             'currencyCode' => $order->getOrderCurrency()->ToString(),
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
             'identifier' => [
