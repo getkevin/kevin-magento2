@@ -41,8 +41,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      * @param \Magento\Framework\Serialize\Serializer\Json $serialize
-     * @param $methodCode
-     * @param $pathPattern
+     * @param string|null $methodCode
+     * @param string $pathPattern
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -196,5 +196,26 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function setCountryList($countryList)
     {
         $this->configWriter->save( self::CONFIG_PATH_COUNTRY_LIST, $countryList);
+    }
+
+    /**
+     * @return int
+     */
+    public function getSendOrderEmailBefore(){
+        return (int) $this->getValue('email_settings/order_email_before');
+    }
+
+    /**
+     * @return int
+     */
+    public function getSendOrderEmailAfter(){
+        return (int) $this->getValue('email_settings/order_email_after');
+    }
+
+    /**
+     * @return int
+     */
+    public function getSendInvoiceEmail(){
+        return (int) $this->getValue('email_settings/invoice_email');
     }
 }
