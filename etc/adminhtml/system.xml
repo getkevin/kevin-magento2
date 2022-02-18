@@ -74,7 +74,32 @@
                         <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                     </field>
                 </group>
-                <group id="extra_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="15" translate="label">
+                <group id="email_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="15" translate="label">
+                    <depends>
+                        <field id="*/*/status">1</field>
+                    </depends>
+                    <attribute type="expanded">1</attribute>
+                    <label>Email Settings</label>
+                    <field id="order_email_before" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label" type="select">
+                        <label>New Order Before Payment</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Send order confirmation email before payment</comment>
+                    </field>
+                    <field id="order_email_after" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label" type="select">
+                        <label>New Order After Payment</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Send order confirmation email after payment</comment>
+                        <depends>
+                            <field id="order_email_before">0</field>
+                        </depends>
+                    </field>
+                    <field id="invoice_email" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="1" translate="label" type="select">
+                        <label>Invoice After Payment</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Send invoice email after payment</comment>
+                    </field>
+                </group>
+                <group id="extra_settings" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="16" translate="label">
                     <depends>
                         <field id="*/*/status">1</field>
                     </depends>

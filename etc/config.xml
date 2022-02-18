@@ -20,6 +20,11 @@
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <signature backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <model>KevinPaymentFacade</model>
+                <email_settings>
+                    <order_email_before>1</order_email_before>
+                    <order_email_after>0</order_email_after>
+                    <invoice_email>1</invoice_email>
+                </email_settings>
                 <extra_settings>
                     <payment_list>1</payment_list>
                     <show_name>0</show_name>

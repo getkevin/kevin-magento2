@@ -67,4 +67,14 @@
         <plugin name="kevin_order_state_plugin"
                 type="Kevin\Payment\Plugin\Sales\Order\Handler\State"/>
     </type>
+
+    <type name="Magento\Sales\Model\Order">
+        <plugin name="kevin_sales_model_order" type="Kevin\Payment\Plugin\Sales\Order" sortOrder="10" disabled="false"/>
+    </type>
+
+    <!-- SKIP order invoice email and SEND previously skipped order confirmation email-->
+    <!-- It exists similar Magento file which looks is outdated Magento\Sales\Model\Order\Invoice\Sender\EmailSender -->
+    <type name="Magento\Sales\Model\Order\Email\Sender\InvoiceSender">
+        <plugin name="kevin_sales_invoice_email_sender" type="Kevin\Payment\Plugin\Sales\Order\Email\Sender\InvoiceSender" sortOrder="10" disabled="false"/>
+    </type>
 </config>

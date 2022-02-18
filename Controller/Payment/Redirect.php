@@ -96,15 +96,19 @@ class Redirect extends \Magento\Framework\App\Action\Action
             return;
         }
 
+        $order = $this->getOrder();
+        if(!$order) {
+            throw new \Exception('Order not found');
+        }
+
         try {
-            $order = $this->getOrder();
             $payment = $order->getPayment();
-            if($payment->getMethodInstance()->getCode() == \Kevin\Payment\Model\Ui\ConfigProvider::CODE){
+            if ($payment->getMethodInstance()->getCode() == \Kevin\Payment\Model\Ui\ConfigProvider::CODE) {
                 $paymentLink = null;
 
-                if($transactionId = $payment->getLastTransId()){
+                if ($transactionId = $payment->getLastTransId()) {
                     $transaction = $this->adapter->getTransaction($transactionId);
-                    if($transaction->getId()){
+                    if ($transaction->getId()) {
                         $transaction->delete();
 
                         $payment->setLastTransId('');
