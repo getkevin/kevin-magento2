@@ -7,7 +7,7 @@ BEFORE YOU START MAKE SURE YOU HAVE RECEIVED CLIENT ID AND CLIENT SECRET FROM KE
 ## Prerequisites
 
 - Magento 2.x
-- PHP 5.6 or later
+- PHP 7.0 or later
 
 ## Installation
 ```
