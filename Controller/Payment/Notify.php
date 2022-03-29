@@ -196,7 +196,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                     } elseif ($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
                                         try {
                                             if ($order->canInvoice()) {
-                                                //Save bank if not saved before
+                                                // Save bank if not saved before
                                                 $payment = $order->getPayment();
                                                 if (!$payment->getAdditionalInformation('bank_code') || !$payment->getAdditionalInformation('bank_name')) {
                                                     $additional = $transaction->getAdditionalInformation();

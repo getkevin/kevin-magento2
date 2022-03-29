@@ -185,7 +185,7 @@ class Adapter
 
             return $transaction->save()->getTransactionId();
         } catch (Exception $e) {
-            //log errors here
+            // log errors here
         }
     }
 
