@@ -142,7 +142,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                             $webhookUrl = $this->getRequest()->getUriString();
                             $isValid = $this->api->verifySignature($signature, $body, $headers, $webhookUrl);
                             if ($isValid) {
-                                //emulate environment to get specific store config data
+                                // emulate environment to get specific store config data
                                 $this->emulation->startEnvironmentEmulation($order->getStoreId());
 
                                 if ($response['type'] == 'PAYMENT_REFUND') {
@@ -266,7 +266,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                 $order->save();
 
                                 $this->getResponse()->setHttpResponseCode(400);
-                                //Unable to change order status. Please check whether signature is correct.
+                                // Unable to change order status. Please check whether signature is correct.
                                 $this->getResponse()->setBody('Signatures do not match.');
                             }
                         }

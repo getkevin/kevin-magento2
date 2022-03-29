@@ -46,7 +46,6 @@ class Test extends Command
             'PSU-User-Agent' => $additional['user_agent'],
             'PSU-Device-ID' => $additional['device_id'],
         ];
-        //echo $transaction->getOrder()->getPayment()->getId(); die;
 
         $results = $this->api->getPayment($transactionId, $attr);
         if (isset($results['bankId'])) {
@@ -70,6 +69,5 @@ class Test extends Command
         $order = $objectManager->get('Magento\Sales\Model\Order')->loadByIncrementId('000000104');
         echo $payment = $order->getPayment()->getMethodInstance()->getCode();
         exit;
-        //$this->api->getBanks();
     }
 }

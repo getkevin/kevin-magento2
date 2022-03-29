@@ -54,8 +54,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $this->configWriter = $configWriter;
         $this->serialize = $serialize;
 
-        //if we DI this class directly to our other components we need this to be initiated
-        //in all other case it is initiated trough di.xml
+        /*
+            if we DI this class directly to our other components we need this to be initiated
+            in all other case it is initiated trough di.xml
+        */
         if (!$methodCode) {
             $methodCode = \Kevin\Payment\Model\Ui\ConfigProvider::CODE;
         }

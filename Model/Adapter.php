@@ -154,19 +154,16 @@ class Adapter
     public function createTransaction($order = null, $paymentData = [])
     {
         try {
-            //get payment object from order object
+            // get payment object from order object
             $payment = $order->getPayment();
             $payment->setLastTransId($paymentData['payment_id']);
             $payment->setTransactionId($paymentData['payment_id']);
-            /*$payment->setAdditionalInformation(
-                $paymentData
-            );*/
             $formatedPrice = $order->getBaseCurrency()->formatTxt(
                 $order->getGrandTotal()
             );
 
             $message = __('The order amount is %1.', $formatedPrice);
-            //get the object of builder class
+            // get the object of builder class
             $trans = $this->transactionBuilder;
             $transaction = $trans->setPayment($payment)
                 ->setOrder($order)
@@ -175,7 +172,7 @@ class Adapter
                     $paymentData
                 )
                 ->setFailSafe(true)
-                //build method creates the transaction and returns the object
+                // build method creates the transaction and returns the object
                 ->build(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER);
 
             $payment->addTransactionCommentsToOrder(

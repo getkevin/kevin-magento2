@@ -149,10 +149,9 @@ class Delete
 
             $creditmemoData = $this->creditmemoRepository->get($creditmemoId);
 
-            //delete credit-memo by credit-memo object
+            // delete credit-memo by credit-memo object
             $this->creditmemoRepository->delete($creditmemoData);
             $this->orderRepository->save($order);
-            //$this->saveOrder($order);
         } catch (Exception $exception) {
             echo $exception->getMessage();
             exit;

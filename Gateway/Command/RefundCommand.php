@@ -86,7 +86,7 @@ class RefundCommand implements \Magento\Payment\Gateway\CommandInterface
             $creditMemo = $this->request->getParam('creditmemo');
 
             if (!$creditMemo['do_offline']) {
-                //emulate environment to get specific store config data
+                // emulate environment to get specific store config data
                 $this->emulation->startEnvironmentEmulation($order->getStoreId());
 
                 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
