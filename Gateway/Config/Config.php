@@ -1,9 +1,9 @@
 <?php
+
 namespace Kevin\Payment\Gateway\Config;
 
 /**
- * Class Config
- * @package Kevin\Payment\Gateway\Config
+ * Class Config.
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
@@ -36,13 +36,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     protected $serialize;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Module\ResourceInterface $moduleResource
-     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
-     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-     * @param \Magento\Framework\Serialize\Serializer\Json $serialize
      * @param string|null $methodCode
-     * @param string $pathPattern
+     * @param string      $pathPattern
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -73,149 +68,170 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return mixed
      */
-    public function getStatus(){
+    public function getStatus()
+    {
         return $this->getValue('status');
     }
 
     /**
      * @return mixed
      */
-    public function getActive(){
+    public function getActive()
+    {
         return $this->getValue('active');
     }
 
     /**
      * @return mixed
      */
-    public function getClientId(){
+    public function getClientId()
+    {
         return $this->getValue('client_id');
     }
 
     /**
      * @return mixed
      */
-    public function getClientSecret(){
+    public function getClientSecret()
+    {
         return $this->getValue('client_secret');
     }
 
     /**
      * @return mixed
      */
-    public function getSignature(){
+    public function getSignature()
+    {
         return $this->getValue('signature');
     }
 
     /**
      * @return mixed
      */
-    public function getRedirectPreferred(){
+    public function getRedirectPreferred()
+    {
         return (int) $this->getValue('extra_settings/redirect_preferred');
     }
 
     /**
      * @return int
      */
-    public function getShowPaymentName(){
+    public function getShowPaymentName()
+    {
         return (int) $this->getValue('extra_settings/show_name');
     }
 
     /**
      * @return int
      */
-    public function getCountryList(){
+    public function getCountryList()
+    {
         return (int) $this->getValue('extra_settings/show_country_list');
     }
 
     /**
      * @return int
      */
-    public function getPaymentSearch(){
+    public function getPaymentSearch()
+    {
         return (int) $this->getValue('extra_settings/show_search');
     }
 
     /**
      * @return mixed
      */
-    public function getPaymentList(){
+    public function getPaymentList()
+    {
         return (int) $this->getValue('extra_settings/payment_list');
     }
 
     /**
      * @return mixed
      */
-    public function getCompanyName(){
+    public function getCompanyName()
+    {
         return $this->getValue('default_bank/company_name');
     }
 
     /**
      * @return mixed
      */
-    public function getCompanyBankAccount(){
+    public function getCompanyBankAccount()
+    {
         return $this->getValue('default_bank/company_bank_account');
     }
 
     /**
      * @return mixed
      */
-    public function getAdditionalBankAccounts(){
+    public function getAdditionalBankAccounts()
+    {
         $value = $this->getValue('additional_bank/additional_bank_list');
+
         return $value ? $this->serialize->unserialize($value) : '';
     }
 
     /**
      * @return mixed
      */
-    public function getKevinCountryList(){
+    public function getKevinCountryList()
+    {
         return $this->getValue('country_list');
     }
 
     /**
      * @return array
      */
-    public function getSystemData(){
+    public function getSystemData()
+    {
         return [
             'pluginVersion' => $this->moduleResource->getDbVersion('Kevin_Payment'),
             'pluginPlatform' => 'Magento 2',
-            'pluginPlatformVersion' => $this->productMetadata->getVersion()
+            'pluginPlatformVersion' => $this->productMetadata->getVersion(),
         ];
     }
 
     /**
-     * Set module status
+     * Set module status.
+     *
      * @param bool $status
      */
     public function setStatus($status)
     {
-        $this->configWriter->save( self::CONFIG_PATH_STATUS, $status);
+        $this->configWriter->save(self::CONFIG_PATH_STATUS, $status);
     }
 
     /**
      * @param $countryList
+     *
      * @return void
      */
     public function setCountryList($countryList)
     {
-        $this->configWriter->save( self::CONFIG_PATH_COUNTRY_LIST, $countryList);
+        $this->configWriter->save(self::CONFIG_PATH_COUNTRY_LIST, $countryList);
     }
 
     /**
      * @return int
      */
-    public function getSendOrderEmailBefore(){
+    public function getSendOrderEmailBefore()
+    {
         return (int) $this->getValue('email_settings/order_email_before');
     }
 
     /**
      * @return int
      */
-    public function getSendOrderEmailAfter(){
+    public function getSendOrderEmailAfter()
+    {
         return (int) $this->getValue('email_settings/order_email_after');
     }
 
     /**
      * @return int
      */
-    public function getSendInvoiceEmail(){
+    public function getSendInvoiceEmail()
+    {
         return (int) $this->getValue('email_settings/invoice_email');
     }
 }

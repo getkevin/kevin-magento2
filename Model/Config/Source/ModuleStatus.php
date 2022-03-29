@@ -9,9 +9,6 @@ class ModuleStatus implements \Magento\Config\Model\Config\CommentInterface
      */
     protected $_config;
 
-    /**
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     */
     public function __construct(
         \Kevin\Payment\Gateway\Config\Config $config
     ) {
@@ -19,17 +16,17 @@ class ModuleStatus implements \Magento\Config\Model\Config\CommentInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getCommentText($elementValue)
     {
-        if ( !$this->_config->getStatus () ) {
-            return sprintf (
+        if (!$this->_config->getStatus()) {
+            return sprintf(
                 '<span style="font-size: 16px; color: red;">%s</span>',
                 __('Unauthorized')
             );
         } else {
-            return sprintf (
+            return sprintf(
                 '<span style="font-size: 16px; color: green;">%s</span>',
                 __('Active')
             );

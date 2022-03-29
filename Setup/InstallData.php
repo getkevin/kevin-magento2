@@ -5,17 +5,14 @@ namespace Kevin\Payment\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\DB\Ddl\Table;
 
 class InstallData implements InstallDataInterface
 {
-
-
     /**
-     * Installs DB schema for a module
+     * Installs DB schema for a module.
      *
      * @param SchemaSetupInterface $setup
-     * @param ModuleContextInterface $context
+     *
      * @return void
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
@@ -29,9 +26,9 @@ class InstallData implements InstallDataInterface
 
         $setup->getConnection()->insertArray(
             $setup->getTable('sales_order_status_state'),
-            ['status', 'state', 'is_default','visible_on_front'],
+            ['status', 'state', 'is_default', 'visible_on_front'],
             [
-                [\Kevin\Payment\Helper\Data::ORDER_STATUS_REFUND_PENDING,'closed', '0', '1'],
+                [\Kevin\Payment\Helper\Data::ORDER_STATUS_REFUND_PENDING, 'closed', '0', '1'],
             ]
         );
 

@@ -14,17 +14,11 @@ class PaymentListUpdate
      */
     protected $helper;
 
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Kevin\Payment\Helper\Data $helper
-     */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Kevin\Payment\Api\Kevin $api,
         \Kevin\Payment\Helper\Data $helper
-    )
-    {
+    ) {
         $this->api = $api;
         $this->helper = $helper;
     }

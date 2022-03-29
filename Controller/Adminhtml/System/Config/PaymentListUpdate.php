@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Kevin\Payment\Controller\Adminhtml\System\Config;
 
 use Magento\Backend\App\Action;
@@ -28,21 +27,13 @@ class PaymentListUpdate extends Action
      */
     protected $timezone;
 
-    /**
-     * @param Action\Context $context
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Kevin\Payment\Helper\Data $helper
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
+        Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Kevin\Payment\Api\Kevin $api,
         \Kevin\Payment\Helper\Data $helper,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-    ) 
-    {
+    ) {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->api = $api;
         $this->helper = $helper;
@@ -65,7 +56,6 @@ class PaymentListUpdate extends Action
 
             if (is_array($kevinMethods) && !empty($kevinMethods)) {
                 if (in_array('bank', $kevinMethods)) {
-
                     $this->helper->saveAvailablePaymentList($this->api->getBanks());
                     $this->helper->saveAvailableCountryList($this->api->getAvailableCountries());
 

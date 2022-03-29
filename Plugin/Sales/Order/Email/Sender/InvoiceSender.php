@@ -14,23 +14,17 @@ class InvoiceSender
      */
     protected $config;
 
-    /**
-     * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender $sender
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $sender,
         \Kevin\Payment\Gateway\Config\Config $config
-    ){
+    ) {
         $this->sender = $sender;
         $this->config = $config;
     }
 
     /**
-     * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $subject
-     * @param callable $proceed
-     * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @param $forceSyncMode
+     *
      * @return void
      */
     public function aroundSend(
@@ -42,8 +36,8 @@ class InvoiceSender
         $order = $invoice->getOrder();
         $canSendInvoice = true;
 
-        if($order->getPayment()->getMethodInstance()->getCode() == \Kevin\Payment\Model\Ui\ConfigProvider::CODE){
-            if(!$this->config->getSendInvoiceEmail()){
+        if ($order->getPayment()->getMethodInstance()->getCode() == \Kevin\Payment\Model\Ui\ConfigProvider::CODE) {
+            if (!$this->config->getSendInvoiceEmail()) {
                 $canSendInvoice = false;
             }
 
@@ -54,7 +48,7 @@ class InvoiceSender
             }
         }
 
-        if($canSendInvoice){
+        if ($canSendInvoice) {
             return $proceed($invoice, $forceSyncMode);
         }
     }

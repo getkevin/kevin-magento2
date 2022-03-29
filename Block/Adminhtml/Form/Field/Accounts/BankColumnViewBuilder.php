@@ -11,25 +11,21 @@ class BankColumnViewBuilder extends Select
      */
     protected $paymentMethodsFactory;
 
-    /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory
-     * @param array $data
-     */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory,
         array $data = []
-    ){
+    ) {
         $this->paymentMethodsFactory = $paymentMethodsFactory;
 
         parent::__construct($context, $data);
     }
 
     /**
-     * Set "name" for <select> element
+     * Set "name" for <select> element.
      *
      * @param string $value
+     *
      * @return $this
      */
     public function setInputName($value)
@@ -38,9 +34,10 @@ class BankColumnViewBuilder extends Select
     }
 
     /**
-     * Set "id" for <select> element
+     * Set "id" for <select> element.
      *
      * @param $value
+     *
      * @return $this
      */
     public function setInputId($value)
@@ -49,7 +46,7 @@ class BankColumnViewBuilder extends Select
     }
 
     /**
-     * Render block HTML
+     * Render block HTML.
      *
      * @return string
      */
@@ -75,15 +72,15 @@ class BankColumnViewBuilder extends Select
         $banks = [];
         $banks[] = [
             'label' => '---',
-            'value' => ''
+            'value' => '',
         ];
 
-        if($collection->getSize()){
-            foreach($collection as $bank){
-                $label = $bank->getData('description') ? $bank->getData('description') : $bank->getData('title');
+        if ($collection->getSize()) {
+            foreach ($collection as $bank) {
+                $label = $bank->getData('description') ?: $bank->getData('title');
                 $banks[] = [
                     'value' => $bank->getData('payment_id'),
-                    'label' => $label
+                    'label' => $label,
                 ];
             }
         }

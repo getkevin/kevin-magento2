@@ -2,10 +2,10 @@
 
 namespace Kevin\Payment\Setup;
 
-use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
@@ -24,11 +24,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     protected $helper;
 
-    /**
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Kevin\Payment\Helper\Data $helper
-     */
     public function __construct(
         \Kevin\Payment\Api\Kevin $api,
         \Kevin\Payment\Gateway\Config\Config $config,
@@ -40,67 +35,64 @@ class UpgradeSchema implements UpgradeSchemaInterface
     }
 
     /**
-     * @param SchemaSetupInterface $setup
-     * @param ModuleContextInterface $context
      * @return void
+     *
      * @throws \Zend_Db_Exception
      */
     public function upgrade(
         SchemaSetupInterface $setup,
         ModuleContextInterface $context
-    )
-    {
+    ) {
         $installer = $setup;
 
         $installer->startSetup();
 
         if (version_compare($context->getVersion(), '1.1.2', '<')) {
-
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('kevin_payment_list'))
                 ->addColumn(
                     'id', Table::TYPE_INTEGER, null,
                     ['identity' => true, 'nullable' => false, 'primary' => true, 'auto_increment' => true],
-                    "ID"
+                    'ID'
                 )
                 ->addColumn(
                     'payment_id', Table::TYPE_TEXT, 100,
                     ['nullable' => true],
-                    "Payment ID"
+                    'Payment ID'
                 )
                 ->addColumn(
                     'country_id', Table::TYPE_TEXT, 100,
                     ['nullable' => true],
-                    "Country ID"
+                    'Country ID'
                 )
                 ->addColumn(
                     'title', Table::TYPE_TEXT, 100,
                     ['nullable' => true],
-                    "Title"
+                    'Title'
                 )
                 ->addColumn(
                     'description', Table::TYPE_TEXT, 100,
                     ['nullable' => true],
-                    "Description"
+                    'Description'
                 )
                 ->addColumn(
                     'logo_path', Table::TYPE_TEXT, 255,
                     ['nullable' => true],
-                    "Logo"
+                    'Logo'
                 )
                 ->addColumn(
                     'created_at', \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP, 100,
                     ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
-                    "Created At"
+                    'Created At'
                 )
                 ->addColumn(
                     'updated_at', \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP, 100,
                     ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
-                    "Updated At"
+                    'Updated At'
                 )->addIndex(
-                    $setup->getIdxName ( 'kevin_payment_list', [ 'country_id' ] ),
-                    [ 'country_id' ]
-                )->setComment ( 'Kevin Payment Methods List' );
+                    $setup->getIdxName('kevin_payment_list', ['country_id']),
+                    ['country_id']
+                )->setComment('Kevin Payment Methods List');
             $installer->getConnection()->createTable($table);
 
             $this->updatePaymentList();
@@ -111,9 +103,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     /**
      * @return void
+     *
      * @throws \Exception
      */
-    public function updatePaymentList() {
+    public function updatePaymentList()
+    {
         try {
             if ($this->config->getClientId() && $this->config->getClientSecret()) {
                 $kevinMethods = $this->api->getPaymentMethods();
@@ -127,9 +121,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
                 $this->config->setStatus(true);
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
 }
-

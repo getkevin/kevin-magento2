@@ -5,7 +5,7 @@ namespace Kevin\Payment\Model\ResourceModel;
 class PaymentMethods extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function _construct()
     {

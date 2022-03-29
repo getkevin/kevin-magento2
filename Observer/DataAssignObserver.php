@@ -1,22 +1,16 @@
 <?php
+
 namespace Kevin\Payment\Observer;
 
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Payment\Model\InfoInterface;
 
 /**
- * Class DataAssignObserver
- * @package Kevin\Payment\Observer
+ * Class DataAssignObserver.
  */
 class DataAssignObserver extends AbstractDataAssignObserver
 {
-    /**
-     * @param Observer $observer
-     */
     public function execute(Observer $observer)
     {
         $method = $this->readMethodArgument($observer);

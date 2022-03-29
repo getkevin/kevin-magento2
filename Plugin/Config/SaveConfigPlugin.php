@@ -24,12 +24,6 @@ class SaveConfigPlugin
      */
     protected $helper;
 
-    /**
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Kevin\Payment\Helper\Data $helper
-     */
     public function __construct(
         \Kevin\Payment\Api\Kevin $api,
         \Kevin\Payment\Gateway\Config\Config $config,
@@ -43,14 +37,14 @@ class SaveConfigPlugin
     }
 
     /**
-     * @param \Magento\Config\Model\Config $subject
      * @return void
+     *
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function beforeSave(
         \Magento\Config\Model\Config $subject
     ) {
-        if (key_exists('kevin_payment', $subject->getData()['groups'])) {
+        if (array_key_exists('kevin_payment', $subject->getData()['groups'])) {
             $enabled = null;
             $clientId = null;
             $clientSecret = null;

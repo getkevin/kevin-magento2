@@ -3,8 +3,8 @@
   "description": "Implements integration with the Kevin payment service provider.",
   "authors": [
     {
-      "name": "Marius",
-      "email": "marek.svorobovic@gmail.com"
+      "name": "kevin.",
+      "email": "help@kevin.eu"
     }
   ],
   "require": {
@@ -22,5 +22,25 @@
     "psr-4": {
       "Kevin\\Payment\\": ""
     }
+  },
+  "scripts": {
+    "fix-style": [
+      "wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.19.0/php-cs-fixer.phar -O php-cs-fixer",
+      "chmod a+x php-cs-fixer",
+      "./php-cs-fixer fix --config=./.php.cs.fixer.php -v --allow-risky=yes"
+    ],
+    "check-style": [
+      "wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.19.0/php-cs-fixer.phar -O php-cs-fixer",
+      "chmod a+x php-cs-fixer",
+      "./php-cs-fixer fix --config=./.php.cs.fixer.php -v --allow-risky=yes --dry-run"
+    ]
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.19"
+  },
+  "extra": {
+    "exclude-from-files": [
+      "registration.php"
+    ]
   }
 }

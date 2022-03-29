@@ -5,66 +5,55 @@ namespace Kevin\Payment\Model\Ui;
 use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
- * Class ConfigProvider
- * @package Kevin\Payment\Model\Ui
+ * Class ConfigProvider.
  */
 final class ConfigProvider implements ConfigProviderInterface
 {
     /**
-     * payment method code
+     * payment method code.
      */
     const CODE = 'kevin_payment';
 
     /**
      * @var \Kevin\Payment\Api\Kevin
      */
-    protected $api;
+    private $api;
 
     /**
      * @var \Kevin\Payment\Gateway\Config\Config
      */
-    protected $config;
+    private $config;
 
     /**
      * @var \Magento\Checkout\Model\Session
      */
-    protected $checkoutSession;
+    private $checkoutSession;
 
     /**
      * @var \Magento\Checkout\Model\Cart
      */
-    protected $cart;
+    private $cart;
 
     /**
      * @var \Magento\Directory\Model\ResourceModel\Country\CollectionFactory
      */
-    protected $countryCollectionFactory;
+    private $countryCollectionFactory;
 
     /**
      * @var \Kevin\Payment\Model\PaymentMethodsFactory
      */
-    protected $paymentMethodsFactory;
+    private $paymentMethodsFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_assetRepo;
+    private $_assetRepo;
 
     /**
      * @var \Kevin\Payment\Helper\Data
      */
-    protected $helper;
+    private $helper;
 
-    /**
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
-     * @param \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Kevin\Payment\Helper\Data $helper
-     */
     public function __construct(
         \Kevin\Payment\Api\Kevin $api,
         \Kevin\Payment\Gateway\Config\Config $config,
@@ -91,6 +80,7 @@ final class ConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $this->api->getProjectSettings();
+
         return [
             'payment' => [
                 self::CODE => [
@@ -101,9 +91,9 @@ final class ConfigProvider implements ConfigProviderInterface
                     'banks' => $this->getBanks(),
                     'countries' => $this->getAvailableCountries(),
                     'redirectUrl' => 'kevin/payment/redirect',
-                    'code' => self::CODE
-                ]
-            ]
+                    'code' => self::CODE,
+                ],
+            ],
         ];
     }
 
@@ -113,7 +103,6 @@ final class ConfigProvider implements ConfigProviderInterface
     public function getBanks()
     {
         if ($this->config->getPaymentList()) {
-
             $kevinMethods = $this->api->getPaymentMethods();
             $paymentMethods = [];
 
@@ -131,27 +120,27 @@ final class ConfigProvider implements ConfigProviderInterface
 
                     if ($collection->getSize()) {
                         foreach ($collection as $method) {
-                            $subMethodCode = self::CODE . '_' . $method->getData('payment_id');
+                            $subMethodCode = self::CODE.'_'.$method->getData('payment_id');
                             $countryId = $method->getData('country_id');
                             $paymentMethods[$countryId][] = [
                                 'id' => $method->getData('payment_id'),
                                 'methodCode' => $subMethodCode,
                                 'title' => $method->getData('title'),
                                 'description' => $method->getData('description'),
-                                'logoPath' => $method->getData('logo_path')
+                                'logoPath' => $method->getData('logo_path'),
                             ];
                         }
                     }
                 }
 
-                if (in_array("card", $kevinMethods)) {
-                    $subMethodCode = self::CODE . '_card';
+                if (in_array('card', $kevinMethods)) {
+                    $subMethodCode = self::CODE.'_card';
                     $paymentMethods['card'] = [
                         'id' => 'card',
                         'methodCode' => $subMethodCode,
                         'title' => 'Credit/Debit card',
                         'description' => '',
-                        'logoPath' => $this->_assetRepo->getUrl("Kevin_Payment::images/credit_card.png")
+                        'logoPath' => $this->_assetRepo->getUrl('Kevin_Payment::images/credit_card.png'),
                     ];
                 }
             }
@@ -182,14 +171,14 @@ final class ConfigProvider implements ConfigProviderInterface
             foreach ($list as $name => $id) {
                 $result[] = [
                     'label' => $name,
-                    'value' => $id
+                    'value' => $id,
                 ];
             }
 
             foreach ($collection as $country) {
                 $list[] = [
                     'label' => $country->getName(),
-                    'value' => $country->getId()
+                    'value' => $country->getId(),
                 ];
             }
         }

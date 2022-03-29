@@ -5,8 +5,7 @@ namespace Kevin\Payment\Controller\Payment;
 use Kevin\Payment\Model\Adapter as KevinAdapter;
 
 /**
- * Class Callback
- * @package Kevin\Payment\Controller\Payment
+ * Class Callback.
  */
 class Callback extends \Magento\Framework\App\Action\Action
 {
@@ -45,20 +44,10 @@ class Callback extends \Magento\Framework\App\Action\Action
      */
     protected $kevinHelper;
 
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param KevinAdapter $adapter
-     * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
-     * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
-     * @param \Magento\Framework\DB\Transaction $transaction
-     * @param \Kevin\Payment\Logger\Logger $logger
-     * @param \Kevin\Payment\Helper\Data $kevinHelper
-     */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Kevin\Payment\Api\Kevin $api,
-        \Kevin\Payment\Model\Adapter $adapter,
+        KevinAdapter $adapter,
         \Magento\Sales\Model\Service\InvoiceService $invoiceService,
         \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender,
         \Magento\Framework\DB\Transaction $transaction,
@@ -79,14 +68,16 @@ class Callback extends \Magento\Framework\App\Action\Action
     /**
      * @return mixed
      */
-    protected function _getCheckout(){
+    protected function _getCheckout()
+    {
         return $this->_objectManager->get('Magento\Checkout\Model\Session');
     }
 
     /**
-     * execute
+     * execute.
      */
-    public function execute(){
+    public function execute()
+    {
         $statusGroup = $this->getRequest()->getParam('statusGroup');
         $order = $this->_getCheckout()->getLastRealOrder();
         $success = false;
@@ -96,7 +87,7 @@ class Callback extends \Magento\Framework\App\Action\Action
             $order->save();
         }
 
-        switch($statusGroup) {
+        switch ($statusGroup) {
             case KevinAdapter::PAYMENT_STATUS_GROUP_STARTED:
                 $this->messageManager->addError(__('Payment initiation was cancelled. Please try again.'));
                 break;
@@ -113,7 +104,7 @@ class Callback extends \Magento\Framework\App\Action\Action
                 break;
         }
 
-        if($success){
+        if ($success) {
             if ($order->getId()) {
                 $quoteId = $order->getQuoteId();
                 $this->kevinHelper->setQuoteInactive($quoteId);
@@ -124,7 +115,5 @@ class Callback extends \Magento\Framework\App\Action\Action
             $this->_getCheckout()->restoreQuote();
             $this->_redirect('checkout/cart');
         }
-
-        return;
     }
 }

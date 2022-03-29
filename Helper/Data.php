@@ -3,8 +3,7 @@
 namespace Kevin\Payment\Helper;
 
 /**
- * Class Data
- * @package Kevin\Payment\Helper
+ * Class Data.
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -17,7 +16,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection $_resourceConnection
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resourceConnection;
 
@@ -36,14 +35,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_config;
 
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
@@ -51,7 +42,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory,
         \Kevin\Payment\Gateway\Config\Config $config
-
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->resourceConnection = $resourceConnection;
@@ -64,7 +54,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param $quoteId
+     *
      * @return void
+     *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function setQuoteInactive($quoteId)
@@ -79,6 +71,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param $tableName
+     *
      * @return void
      */
     public function truncateTable($tableName)
@@ -94,6 +87,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param $bankList
+     *
      * @return bool
      */
     public function saveAvailablePaymentList($bankList)
@@ -113,11 +107,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     ->save();
             }
         }
+
         return true;
     }
 
     /**
      * @param $countryList
+     *
      * @return void
      */
     public function saveAvailableCountryList($countryList)
