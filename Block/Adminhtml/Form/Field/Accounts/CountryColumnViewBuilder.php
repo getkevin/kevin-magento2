@@ -16,25 +16,23 @@ class CountryColumnViewBuilder extends Select
      */
     protected $countryCollectionFactory;
 
-    /**
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
-     */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Kevin\Payment\Gateway\Config\Config $config,
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         array $data = []
-    ){
+    ) {
         $this->config = $config;
         $this->countryCollectionFactory = $countryCollectionFactory;
 
         parent::__construct($context, $data);
     }
+
     /**
-     * Set "name" for <select> element
+     * Set "name" for <select> element.
      *
      * @param string $value
+     *
      * @return $this
      */
     public function setInputName($value)
@@ -43,9 +41,10 @@ class CountryColumnViewBuilder extends Select
     }
 
     /**
-     * Set "id" for <select> element
+     * Set "id" for <select> element.
      *
      * @param $value
+     *
      * @return $this
      */
     public function setInputId($value)
@@ -54,7 +53,7 @@ class CountryColumnViewBuilder extends Select
     }
 
     /**
-     * Render block HTML
+     * Render block HTML.
      *
      * @return string
      */
@@ -78,10 +77,10 @@ class CountryColumnViewBuilder extends Select
         $result = [];
         $result[] = [
             'label' => '---',
-            'value' => ''
+            'value' => '',
         ];
 
-        if($kevinCountries) {
+        if ($kevinCountries) {
             $collection = $this->countryCollectionFactory->create()
                 ->loadByStore()
                 ->addFieldToFilter('iso2_code', ['in' => explode(',', $kevinCountries)]);
@@ -95,14 +94,14 @@ class CountryColumnViewBuilder extends Select
             foreach ($list as $name => $id) {
                 $result[] = [
                     'label' => $name,
-                    'value' => $id
+                    'value' => $id,
                 ];
             }
 
             foreach ($collection as $country) {
                 $list[] = [
                     'label' => $country->getName(),
-                    'value' => $country->getId()
+                    'value' => $country->getId(),
                 ];
             }
         }

@@ -4,11 +4,11 @@ namespace Kevin\Payment\Model\Creditmemo;
 
 use Exception;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Registry;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Registry;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 class Delete
 {
@@ -42,14 +42,6 @@ class Delete
      */
     protected $orderRepository;
 
-    /**
-     * @param Order $order
-     * @param CreditmemoRepositoryInterface $creditmemoRepository
-     * @param LoggerInterface $logger
-     * @param Session $authSession
-     * @param Registry $registry
-     * @param OrderRepositoryInterface $orderRepository
-     */
     public function __construct(
         Order $order,
         CreditmemoRepositoryInterface $creditmemoRepository,
@@ -68,12 +60,14 @@ class Delete
 
     /**
      * @param $creditmemoId
+     *
      * @return \Magento\Sales\Model\Order
+     *
      * @throws \Exception
      */
     public function deleteCreditmemo($creditmemoId)
     {
-        if($this->registry->registry('isSecureArea')){
+        if ($this->registry->registry('isSecureArea')) {
             $this->registry->unregister('isSecureArea');
         }
         $this->registry->register('isSecureArea', true);
@@ -155,12 +149,12 @@ class Delete
 
             $creditmemoData = $this->creditmemoRepository->get($creditmemoId);
 
-            //delete credit-memo by credit-memo object
+            // delete credit-memo by credit-memo object
             $this->creditmemoRepository->delete($creditmemoData);
             $this->orderRepository->save($order);
-            //$this->saveOrder($order);
         } catch (Exception $exception) {
-            echo $exception->getMessage(); die;
+            echo $exception->getMessage();
+            exit;
             $this->logger->critical($exception->getMessage());
         }
 

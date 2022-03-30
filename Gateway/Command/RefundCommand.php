@@ -1,9 +1,9 @@
 <?php
+
 namespace Kevin\Payment\Gateway\Command;
 
 /**
- * Class RefundCommand
- * @package Kevin\Payment\Gateway\Command
+ * Class RefundCommand.
  */
 class RefundCommand implements \Magento\Payment\Gateway\CommandInterface
 {
@@ -44,13 +44,6 @@ class RefundCommand implements \Magento\Payment\Gateway\CommandInterface
 
     /**
      * RefundCommand constructor.
-     * @param \Kevin\Payment\Model\Adapter $adapter
-     * @param \Magento\Framework\Locale\Resolver $store
-     * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
-     * @param \Magento\Sales\Model\Order\Payment\Transaction\Builder $transactionBuilder
-     * @param \Kevin\Payment\Logger\Logger $logger
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Store\Model\App\Emulation $emulation
      */
     public function __construct(
         \Kevin\Payment\Model\Adapter $adapter,
@@ -71,7 +64,6 @@ class RefundCommand implements \Magento\Payment\Gateway\CommandInterface
     }
 
     /**
-     * @param array $commandSubject
      * @throws \Exception
      */
     public function execute(array $commandSubject)
@@ -93,21 +85,21 @@ class RefundCommand implements \Magento\Payment\Gateway\CommandInterface
 
             $creditMemo = $this->request->getParam('creditmemo');
 
-            if(!$creditMemo['do_offline']){
-                //emulate environment to get specific store config data
+            if (!$creditMemo['do_offline']) {
+                // emulate environment to get specific store config data
                 $this->emulation->startEnvironmentEmulation($order->getStoreId());
 
                 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
                 $transaction = $objectManager->create('\Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory')->create()
                     ->addOrderIdFilter($order->getId())
-                    ->setOrder('transaction_id','ASC')
+                    ->setOrder('transaction_id', 'ASC')
                     ->getFirstItem();
 
                 $transactionId = $transaction->getTxnId();
 
                 $results = $this->adapter->initRefund($transactionId, $amount);
-                
-                if(isset($results['id'])){
+
+                if (isset($results['id'])) {
                     $payment->getPayment()->setTransactionId($results['id']);
                 } else {
                     throw new \Exception('Kevin Error');

@@ -2,8 +2,8 @@
 
 namespace Kevin\Payment\Block\Adminhtml\Form\Field;
 
-use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\CountryColumnViewBuilder;
 use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\BankColumnViewBuilder;
+use Kevin\Payment\Block\Adminhtml\Form\Field\Accounts\CountryColumnViewBuilder;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
@@ -30,12 +30,6 @@ class AccountFieldArray extends AbstractFieldArray
      */
     protected $bankView;
 
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory
-     * @param \Magento\Framework\Serialize\Serializer\Json $json
-     * @param array $data
-     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory,
@@ -49,17 +43,17 @@ class AccountFieldArray extends AbstractFieldArray
     }
 
     /**
-     * Prepare rendering the new field by adding all the needed columns
+     * Prepare rendering the new field by adding all the needed columns.
      */
     protected function _prepareToRender()
     {
         $this->addColumn('country_id', [
             'label' => __('Country'),
-            'renderer' => $this->getCountryView()
+            'renderer' => $this->getCountryView(),
         ]);
         $this->addColumn('bank', [
             'label' => __('Bank'),
-            'renderer' => $this->getBankView()
+            'renderer' => $this->getBankView(),
         ]);
         $this->addColumn('company', ['label' => __('Company Name'), 'class' => 'required-entry validate-alphanum-with-spaces']);
         $this->addColumn('bank_account', ['label' => __('Bank Account'), 'class' => 'required-entry']);
@@ -68,9 +62,8 @@ class AccountFieldArray extends AbstractFieldArray
     }
 
     /**
-     * Prepare existing row data object
+     * Prepare existing row data object.
      *
-     * @param DataObject $row
      * @throws LocalizedException
      */
     protected function _prepareArrayRow(DataObject $row)
@@ -80,11 +73,11 @@ class AccountFieldArray extends AbstractFieldArray
         $countryId = $row->getCountryId();
         $bank = $row->getBank();
         if ($countryId !== null) {
-            $options['option_' . $this->getCountryView()->calcOptionHash($countryId)] = 'selected="selected"';
+            $options['option_'.$this->getCountryView()->calcOptionHash($countryId)] = 'selected="selected"';
         }
 
         if ($bank !== null) {
-            $options['option_' . $this->getBankView()->calcOptionHash($bank)] = 'selected="selected"';
+            $options['option_'.$this->getBankView()->calcOptionHash($bank)] = 'selected="selected"';
         }
 
         $row->setData('option_extra_attrs', $options);
@@ -92,6 +85,7 @@ class AccountFieldArray extends AbstractFieldArray
 
     /**
      * @return CountryColumnViewBuilder
+     *
      * @throws LocalizedException
      */
     private function getCountryView()
@@ -103,11 +97,13 @@ class AccountFieldArray extends AbstractFieldArray
                 ['data' => ['is_render_to_js_template' => true]]
             );
         }
+
         return $this->countryView;
     }
 
     /**
      * @return BankColumnViewBuilder|\Magento\Framework\View\Element\BlockInterface
+     *
      * @throws LocalizedException
      */
     private function getBankView()
@@ -119,11 +115,11 @@ class AccountFieldArray extends AbstractFieldArray
                 ['data' => ['is_render_to_js_template' => true]]
             );
         }
+
         return $this->bankView;
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
@@ -173,6 +169,7 @@ class AccountFieldArray extends AbstractFieldArray
                 });
             </script>';
         $html .= $script;
+
         return $html;
     }
 
@@ -188,10 +185,10 @@ class AccountFieldArray extends AbstractFieldArray
         if ($collection->getSize()) {
             foreach ($collection as $bank) {
                 $countryId = $bank->getData('country_id');
-                $label = $bank->getData('description') ? $bank->getData('description') : $bank->getData('title');
+                $label = $bank->getData('description') ?: $bank->getData('title');
                 $banks[$countryId][] = [
                     'code' => $bank->getData('payment_id'),
-                    'title' => $label
+                    'title' => $label,
                 ];
             }
         }

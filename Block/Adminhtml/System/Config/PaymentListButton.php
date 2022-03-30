@@ -23,12 +23,6 @@ class PaymentListButton extends Field
      */
     protected $timezone;
 
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @param array $data
-     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Kevin\Payment\Model\PaymentMethodsFactory $paymentMethodsFactory,
@@ -42,9 +36,7 @@ class PaymentListButton extends Field
     }
 
     /**
-     * Remove scope label
-     *
-     * @param  AbstractElement $element
+     * Remove scope label.
      *
      * @return string
      */
@@ -56,9 +48,7 @@ class PaymentListButton extends Field
     }
 
     /**
-     * Return element html
-     *
-     * @param  AbstractElement $element
+     * Return element html.
      *
      * @return string
      */
@@ -68,7 +58,7 @@ class PaymentListButton extends Field
     }
 
     /**
-     * Return ajax url for custom button
+     * Return ajax url for custom button.
      *
      * @return string
      */
@@ -99,13 +89,14 @@ class PaymentListButton extends Field
     /**
      * @return false
      */
-    public function getLastUpdateDate(){
+    public function getLastUpdateDate()
+    {
         $rowItem = $this->paymentMethodsFactory->create()
             ->getCollection()
             ->getFirstItem();
 
-        if($rowItem){
-            return $this->timezone->date( $rowItem->getCreatedAt())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+        if ($rowItem) {
+            return $this->timezone->date($rowItem->getCreatedAt())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
         }
 
         return false;

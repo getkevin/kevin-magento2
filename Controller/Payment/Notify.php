@@ -5,8 +5,7 @@ namespace Kevin\Payment\Controller\Payment;
 use Zend\Json\Json;
 
 /**
- * Class Notify
- * @package Kevin\Payment\Controller\Payment
+ * Class Notify.
  */
 class Notify extends \Magento\Framework\App\Action\Action
 {
@@ -80,23 +79,6 @@ class Notify extends \Magento\Framework\App\Action\Action
      */
     protected $kevinHelper;
 
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Kevin\Payment\Model\Adapter $adapter
-     * @param \Magento\Sales\Model\Service\InvoiceService $invoiceService
-     * @param \Magento\Sales\Model\Order\Email\Sender\InvoiceSender $invoiceSender
-     * @param \Magento\Framework\DB\Transaction $transaction
-     * @param \Kevin\Payment\Logger\Logger $logger
-     * @param \Magento\Store\Model\App\Emulation $emulation
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Api\CreditmemoRepositoryInterface $creditmemoRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Kevin\Payment\Model\Creditmemo\Delete $creditmemoDelete
-     * @param \Kevin\Payment\Helper\Data $kevinHelper
-     */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -138,7 +120,7 @@ class Notify extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $body = $this->getRequest()->getContent();
-        if($body) {
+        if ($body) {
             $response = Json::decode($body, true);
             if (!empty($response)) {
                 $this->logger->info('Callback Body: '.$body);
@@ -159,13 +141,13 @@ class Notify extends \Magento\Framework\App\Action\Action
                             $headers = getallheaders();
                             $webhookUrl = $this->getRequest()->getUriString();
                             $isValid = $this->api->verifySignature($signature, $body, $headers, $webhookUrl);
-                            if($isValid) {
-                                //emulate environment to get specific store config data
+                            if ($isValid) {
+                                // emulate environment to get specific store config data
                                 $this->emulation->startEnvironmentEmulation($order->getStoreId());
 
                                 if ($response['type'] == 'PAYMENT_REFUND') {
                                     if ($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
-                                        if($order->canCreditmemo()){
+                                        if ($order->canCreditmemo()) {
                                             $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
                                                 ->setStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
                                         } else {
@@ -179,9 +161,9 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         $this->kevinHelper->setQuoteInactive($quoteId);
 
                                         return $this->getResponse()->setBody(sprintf('Payment with ID "%s" was refunded', $paymentId));
-                                    } elseif($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_ERROR) {
+                                    } elseif ($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_ERROR) {
                                         $creditmemo = $this->getCreditMemoByTxnId($paymentId);
-                                        if($creditmemo){
+                                        if ($creditmemo) {
                                             $this->creditmemoDelete->deleteCreditmemo($creditmemo->getId());
                                         }
                                         $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
@@ -193,11 +175,10 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         return $this->getResponse()->setBody(sprintf('Payment with ID "%s" was not refunded', $paymentId));
                                     }
                                 } else {
-
-                                    if (!in_array($order->getState(), array(
+                                    if (!in_array($order->getState(), [
                                         $order::STATE_NEW,
-                                        $order::STATE_PENDING_PAYMENT
-                                    ))) {
+                                        $order::STATE_PENDING_PAYMENT,
+                                    ])) {
                                         return $this->getResponse()->setBody(sprintf('Order "%s" status is already changed', $order->getIncrementId()));
                                     }
 
@@ -207,7 +188,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                         if ($order->getId() && !$order->isCanceled()) {
                                             $order->registerCancellation('')->save();
 
-                                            $order->addStatusToHistory($order->getStatus(), "Canceled by kevin.");
+                                            $order->addStatusToHistory($order->getStatus(), 'Canceled by kevin.');
                                             $order->save();
 
                                             $this->getResponse()->setBody(sprintf('Order "%s" was canceled', $order->getIncrementId()));
@@ -215,16 +196,16 @@ class Notify extends \Magento\Framework\App\Action\Action
                                     } elseif ($response['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
                                         try {
                                             if ($order->canInvoice()) {
-                                                //Save bank if not saved before
+                                                // Save bank if not saved before
                                                 $payment = $order->getPayment();
                                                 if (!$payment->getAdditionalInformation('bank_code') || !$payment->getAdditionalInformation('bank_name')) {
                                                     $additional = $transaction->getAdditionalInformation();
-                                                    $attr = array(
+                                                    $attr = [
                                                         'PSU-IP-Address' => $additional['ip_address'],
                                                         'PSU-IP-Port' => $additional['ip_port'],
                                                         'PSU-User-Agent' => $additional['user_agent'],
                                                         'PSU-Device-ID' => $additional['device_id'],
-                                                    );
+                                                    ];
 
                                                     $results = $this->api->getPayment($paymentId, $attr);
 
@@ -238,7 +219,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                                     }
                                                 }
 
-                                                if($payment->getAdditionalInformation('bank_code') == 'card'){
+                                                if ($payment->getAdditionalInformation('bank_code') == 'card') {
                                                     $paymentType = 'card';
                                                 } else {
                                                     $paymentType = 'bank';
@@ -246,7 +227,7 @@ class Notify extends \Magento\Framework\App\Action\Action
 
                                                 $invoice = $this->invoiceService->prepareInvoice($order);
 
-                                                if(in_array($paymentType, $this->api->getAllowedRefund())) {
+                                                if (in_array($paymentType, $this->api->getAllowedRefund())) {
                                                     $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
                                                 } else {
                                                     $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_OFFLINE);
@@ -262,7 +243,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                                                     $order->setState($stateProcessing)
                                                         ->setStatus($order->getConfig()->getStateDefaultStatus($stateProcessing));
 
-                                                    $order->addStatusToHistory($order->getStatus(), "Status updated by kevin confirmation.");
+                                                    $order->addStatusToHistory($order->getStatus(), 'Status updated by kevin confirmation.');
                                                     $order->save();
                                                 }
 
@@ -281,11 +262,11 @@ class Notify extends \Magento\Framework\App\Action\Action
                                     $this->emulation->stopEnvironmentEmulation();
                                 }
                             } else {
-                                $order->addStatusToHistory($order->getStatus(), "Unable to change order status. Please check whether signature is correct.");
+                                $order->addStatusToHistory($order->getStatus(), 'Unable to change order status. Please check whether signature is correct.');
                                 $order->save();
 
                                 $this->getResponse()->setHttpResponseCode(400);
-                                //Unable to change order status. Please check whether signature is correct.
+                                // Unable to change order status. Please check whether signature is correct.
                                 $this->getResponse()->setBody('Signatures do not match.');
                             }
                         }
@@ -301,25 +282,27 @@ class Notify extends \Magento\Framework\App\Action\Action
         }
     }
 
-    public function getCreditMemoByTxnId($txnId){
+    public function getCreditMemoByTxnId($txnId)
+    {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('transaction_id', $txnId)
             ->create();
         try {
             $creditmemos = $this->creditmemoRepository->getList($searchCriteria);
-            foreach($creditmemos->getItems() as $item){
+            foreach ($creditmemos->getItems() as $item) {
                 return $item;
             }
-        } catch (Exception $exception)  {
+        } catch (Exception $exception) {
             $this->logger->critical($exception->getMessage());
             $creditmemoRecords = null;
         }
     }
 
-    public function isRefundCompleted($paymentId){
+    public function isRefundCompleted($paymentId)
+    {
         $refunds = $this->api->getRefunds($paymentId);
-        foreach($refunds as $refund){
-            if($refund['paymentId'] == $paymentId && $refund['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS){
+        foreach ($refunds as $refund) {
+            if ($refund['paymentId'] == $paymentId && $refund['statusGroup'] == \Kevin\Payment\Model\Adapter::PAYMENT_STATUS_GROUP_SUCCESS) {
                 return true;
             }
         }

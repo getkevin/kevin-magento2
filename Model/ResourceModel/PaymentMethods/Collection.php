@@ -5,14 +5,14 @@ namespace Kevin\Payment\Model\ResourceModel\PaymentMethods;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Identification field
+     * Identification field.
      *
-     * @var string $_idFieldName
+     * @var string
      */
     protected $_idFieldName = 'id';
 
     /**
-     * Connect model with resource model
+     * Connect model with resource model.
      */
     protected function _construct()
     {

@@ -3,8 +3,7 @@
 namespace Kevin\Payment\Controller\Payment;
 
 /**
- * Class Redirect
- * @package Kevin\Payment\Controller\Payment
+ * Class Redirect.
  */
 class Redirect extends \Magento\Framework\App\Action\Action
 {
@@ -40,13 +39,6 @@ class Redirect extends \Magento\Framework\App\Action\Action
 
     /**
      * Redirect constructor.
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Kevin\Payment\Model\Adapter $adapter
-     * @param \Magento\Framework\Locale\Resolver $store
-     * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Kevin\Payment\Logger\Logger $logger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -70,7 +62,8 @@ class Redirect extends \Magento\Framework\App\Action\Action
     /**
      * @return mixed
      */
-    protected function _getCheckout(){
+    protected function _getCheckout()
+    {
         return $this->_objectManager->get('Magento\Checkout\Model\Session');
     }
 
@@ -81,15 +74,18 @@ class Redirect extends \Magento\Framework\App\Action\Action
     {
         if ($this->_getCheckout()->getLastRealOrderId()) {
             $order = $this->orderFactory->create()->loadByIncrementId($this->_getCheckout()->getLastRealOrderId());
+
             return $order;
         }
+
         return false;
     }
 
     /**
-     * execute
+     * execute.
      */
-    public function execute(){
+    public function execute()
+    {
         $status = $this->config->getActive();
 
         if (!$status) {
@@ -97,7 +93,7 @@ class Redirect extends \Magento\Framework\App\Action\Action
         }
 
         $order = $this->getOrder();
-        if(!$order) {
+        if (!$order) {
             throw new \Exception('Order not found');
         }
 
@@ -131,8 +127,8 @@ class Redirect extends \Magento\Framework\App\Action\Action
                     $this->adapter->createTransaction($order, $additional);
 
                     $lang = $this->getLocaleCode();
-                    $query = parse_url($response['confirmLink'], PHP_URL_QUERY);
-                    $paymentLink .= ($query) ? '&lang=' . $lang : '?lang=' . $lang;
+                    $query = parse_url($response['confirmLink'], \PHP_URL_QUERY);
+                    $paymentLink .= ($query) ? '&lang='.$lang : '?lang='.$lang;
 
                     $this->_redirect($paymentLink);
                 } else {
@@ -150,7 +146,8 @@ class Redirect extends \Magento\Framework\App\Action\Action
     /**
      * @return false|string
      */
-    protected function getLocaleCode(){
+    protected function getLocaleCode()
+    {
         $currentStore = $this->store->getLocale();
         $lang = strstr($currentStore, '_', true);
 
@@ -160,27 +157,30 @@ class Redirect extends \Magento\Framework\App\Action\Action
     /**
      * @return string
      */
-    protected function getUUID(){
+    protected function getUUID()
+    {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0x0fff) | 0x4000,
-            mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+            mt_rand(0, 0xFFFF), mt_rand(0, 0xFFFF),
+            mt_rand(0, 0xFFFF),
+            mt_rand(0, 0x0FFF) | 0x4000,
+            mt_rand(0, 0x3FFF) | 0x8000,
+            mt_rand(0, 0xFFFF), mt_rand(0, 0xFFFF), mt_rand(0, 0xFFFF)
         );
     }
 
     /**
      * @return string
      */
-    protected function getCustomerDeviceId(){
+    protected function getCustomerDeviceId()
+    {
         return $this->getUUID();
     }
 
     /**
      * @return mixed
      */
-    protected  function getCustomerIpAddress(){
+    protected function getCustomerIpAddress()
+    {
         return $this->remoteAddress->getRemoteAddress();
     }
 

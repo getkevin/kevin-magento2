@@ -18,10 +18,6 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
 
     /**
      * Version constructor.
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Directory\Helper\Data $directoryHelper
-     * @param \Magento\Framework\Module\ResourceInterface $moduleResource
-     * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -35,7 +31,6 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * @param AbstractElement $element
      * @return string
      */
     protected function _getElementHtml(AbstractElement $element)
@@ -43,6 +38,7 @@ class Version extends \Magento\Config\Block\System\Config\Form\Field
         $html = parent::_getElementHtml($element);
         $version = $this->_moduleResource->getDbVersion('Kevin_Payment');
         $html .= '<strong>'.$version.'</strong>';
+
         return $html;
     }
 }

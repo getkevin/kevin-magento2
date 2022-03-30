@@ -6,13 +6,12 @@ use Kevin\Client;
 use Kevin\SecurityManager;
 
 /**
- * Class Kevin
- * @package Kevin\Payment\Api
+ * Class Kevin.
  */
 class Kevin
 {
     /**
-     * Signature verify timeout in milliseconds
+     * Signature verify timeout in milliseconds.
      */
     const SIGNATURE_VERIFY_TIMEOUT = 300000;
 
@@ -33,8 +32,6 @@ class Kevin
 
     /**
      * Kevin constructor.
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Magento\Framework\Module\ResourceInterface $moduleResource
      */
     public function __construct(
         \Kevin\Payment\Gateway\Config\Config $config,
@@ -47,12 +44,14 @@ class Kevin
     /**
      * @param $clientId
      * @param $clientSecret
+     *
      * @return Client|void
      */
-    public function getConnection($clientId = null, $clientSecret = null){
+    public function getConnection($clientId = null, $clientSecret = null)
+    {
         $options = [
             'error' => 'exception',
-            'version' => '0.3'
+            'version' => '0.3',
         ];
 
         $options = array_merge($options, $this->config->getSystemData());
@@ -69,13 +68,15 @@ class Kevin
         $clientSecret = $this->config->getClientSecret();
 
         $client = $this->getConnection($clientId, $clientSecret);
+
         return $client;
     }
 
     /**
      * @return array
      */
-    public function getProjectSettings(){
+    public function getProjectSettings()
+    {
         try {
             $methods = $this->getClient()->auth()->getProjectSettings();
 
@@ -88,12 +89,14 @@ class Kevin
     /**
      * @return array|mixed|void
      */
-    public function getAllowedRefund(){
+    public function getAllowedRefund()
+    {
         try {
             $settings = $this->getProjectSettings();
-            if(isset($settings['allowedRefundsFor'])){
+            if (isset($settings['allowedRefundsFor'])) {
                 return $settings['allowedRefundsFor'];
             }
+
             return [];
         } catch (\Exception $exception) {
             return [];
@@ -103,10 +106,11 @@ class Kevin
     /**
      * @return array
      */
-    public function getPaymentMethods(){
+    public function getPaymentMethods()
+    {
         try {
             $settings = $this->getProjectSettings();
-            if(isset($settings['paymentMethods'])){
+            if (isset($settings['paymentMethods'])) {
                 return $settings['paymentMethods'];
             }
         } catch (\Exception $exception) {
@@ -116,20 +120,21 @@ class Kevin
 
     /**
      * @param null $country
+     *
      * @return array|mixed
      */
     public function getBanks($country = null)
     {
         try {
-            if(!$this->banks) {
+            if (!$this->banks) {
                 $params = [];
-                if($country){
+                if ($country) {
                     $params = ['countryCode' => $country];
                 }
                 $kevinAuth = $this->getClient()->auth();
 
                 $banks = $kevinAuth->getBanks($params);
-                if(isset($banks['data'])){
+                if (isset($banks['data'])) {
                     $this->banks = $banks['data'];
                 }
             }
@@ -142,9 +147,11 @@ class Kevin
 
     /**
      * @param $bankId
+     *
      * @return array
      */
-    public function getBank($bankId){
+    public function getBank($bankId)
+    {
         try {
             $kevinAuth = $this->getClient()->auth();
             $bank = $kevinAuth->getBank($bankId);
@@ -157,39 +164,46 @@ class Kevin
 
     /**
      * @param $params
+     *
      * @return mixed
      */
-    public function initPayment($params){
-       return $this->getClient()->payment()->initPayment($params);
+    public function initPayment($params)
+    {
+        return $this->getClient()->payment()->initPayment($params);
     }
 
     /**
      * @param $paymentId
      * @param $attr
+     *
      * @return mixed
      */
-    public function getPaymentStatus($paymentId, $attr){
+    public function getPaymentStatus($paymentId, $attr)
+    {
         return $this->getClient()->payment()->getPaymentStatus($paymentId, $attr);
     }
 
     /**
      * @param $paymentId
      * @param $attr
+     *
      * @return mixed
      */
-    public function getPayment($paymentId, $attr){
+    public function getPayment($paymentId, $attr)
+    {
         return $this->getClient()->payment()->getPayment($paymentId, $attr);
     }
 
     /**
      * @return array
      */
-    public function getAvailableCountries(){
+    public function getAvailableCountries()
+    {
         try {
             $kevinAuth = $this->getClient()->auth();
             $response = $kevinAuth->getCountries();
 
-            if(isset($response['data'])){
+            if (isset($response['data'])) {
                 return $response['data'];
             }
         } catch (\Exception $exception) {
@@ -200,19 +214,23 @@ class Kevin
     /**
      * @param $paymentId
      * @param $attr
+     *
      * @return mixed
      */
-    public function initRefund($paymentId, $attr){
+    public function initRefund($paymentId, $attr)
+    {
         return $this->getClient()->payment()->initiatePaymentRefund($paymentId, $attr);
     }
 
     /**
      * @param $paymentId
+     *
      * @return mixed|void
      */
-    public function getRefunds($paymentId){
+    public function getRefunds($paymentId)
+    {
         $response = $this->getClient()->payment()->getPaymentRefunds($paymentId);
-        if(isset($response['data'])){
+        if (isset($response['data'])) {
             return $response['data'];
         }
     }
@@ -222,9 +240,11 @@ class Kevin
      * @param $requestBody
      * @param $headers
      * @param $webhookUrl
+     *
      * @return mixed
      */
-    public function verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl){
+    public function verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl)
+    {
         $timestampTimeout = self::SIGNATURE_VERIFY_TIMEOUT;
         $isValid = SecurityManager::verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl, $timestampTimeout);
 

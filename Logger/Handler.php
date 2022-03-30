@@ -6,8 +6,7 @@ use Magento\Framework\Logger\Handler\Base;
 use Monolog\Logger;
 
 /**
- * Class Handler
- * @package Kevin\Payment\Logger
+ * Class Handler.
  */
 class Handler extends Base
 {
@@ -17,7 +16,7 @@ class Handler extends Base
     protected $loggerType = Logger::INFO;
 
     /**
-     * @var string 
+     * @var string
      */
     protected $fileName = '/var/log/kevin.log';
 }

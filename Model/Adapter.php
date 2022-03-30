@@ -2,11 +2,8 @@
 
 namespace Kevin\Payment\Model;
 
-use Kevin\Payment\Model\Ui\ConfigProvider;
-
 /**
- * Class Adapter
- * @package Kevin\Payment\Model
+ * Class Adapter.
  */
 class Adapter
 {
@@ -53,12 +50,6 @@ class Adapter
 
     /**
      * Adapter constructor.
-     * @param \Kevin\Payment\Api\Kevin $api
-     * @param \Magento\Framework\UrlInterface $url
-     * @param \Kevin\Payment\Gateway\Config\Config $config
-     * @param \Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory $transactions
-     * @param \Magento\Sales\Model\Order\Payment\Transaction\Builder $transactionBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Kevin\Payment\Api\Kevin $api,
@@ -78,9 +69,11 @@ class Adapter
 
     /**
      * @param $order
+     *
      * @return array
      */
-    public function initPayment($order){
+    public function initPayment($order)
+    {
         $additionalInformation = $order->getPayment()->getAdditionalInformation();
 
         $companyName = $this->config->getCompanyName();
@@ -93,15 +86,15 @@ class Adapter
             'currencyCode' => $order->getOrderCurrency()->ToString(),
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
             'identifier' => [
-                'email' => $order->getCustomerEmail()
-            ]
+                'email' => $order->getCustomerEmail(),
+            ],
         ];
 
         if (!empty($additionalInformation['bank_code'])) {
             $bankAccounts = $this->config->getAdditionalBankAccounts();
-            if($bankAccounts) {
+            if ($bankAccounts) {
                 foreach ($bankAccounts as $account) {
-                    if($account['bank'] == $additionalInformation['bank_code']){
+                    if ($account['bank'] == $additionalInformation['bank_code']) {
                         $companyName = $account['company'];
                         $companyBankAccount = $account['bank_account'];
                         break;
@@ -109,13 +102,13 @@ class Adapter
                 }
             }
 
-            if($additionalInformation['bank_code'] == 'card'){
+            if ($additionalInformation['bank_code'] == 'card') {
                 $params['cardPaymentMethod'] = [];
                 $params['paymentMethodPreferred'] = 'card';
             } else {
                 $params['bankId'] = $additionalInformation['bank_code'];
 
-                if($this->config->getRedirectPreferred()){
+                if ($this->config->getRedirectPreferred()) {
                     $params['redirectPreferred'] = 'true';
                 }
             }
@@ -126,7 +119,7 @@ class Adapter
             'creditorName' => $companyName,
             'creditorAccount' => [
                 'iban' => $companyBankAccount,
-            ]
+            ],
         ];
 
         $response = $this->api->initPayment($params);
@@ -137,12 +130,14 @@ class Adapter
     /**
      * @param $payment
      * @param $amount
+     *
      * @return array
      */
-    public function initRefund($transactionId, $amount){
+    public function initRefund($transactionId, $amount)
+    {
         $params = [
             'amount' => $amount,
-            'Webhook-URL' => $this->storeManager->getStore()->getBaseUrl().'kevin/payment/notify'
+            'Webhook-URL' => $this->storeManager->getStore()->getBaseUrl().'kevin/payment/notify',
         ];
 
         $response = $this->api->initRefund($transactionId, $params);
@@ -151,26 +146,24 @@ class Adapter
     }
 
     /**
-     * @param null $order
+     * @param null  $order
      * @param array $paymentData
+     *
      * @return mixed
      */
     public function createTransaction($order = null, $paymentData = [])
     {
         try {
-            //get payment object from order object
+            // get payment object from order object
             $payment = $order->getPayment();
             $payment->setLastTransId($paymentData['payment_id']);
             $payment->setTransactionId($paymentData['payment_id']);
-            /*$payment->setAdditionalInformation(
-                $paymentData
-            );*/
             $formatedPrice = $order->getBaseCurrency()->formatTxt(
                 $order->getGrandTotal()
             );
 
             $message = __('The order amount is %1.', $formatedPrice);
-            //get the object of builder class
+            // get the object of builder class
             $trans = $this->transactionBuilder;
             $transaction = $trans->setPayment($payment)
                 ->setOrder($order)
@@ -179,7 +172,7 @@ class Adapter
                     $paymentData
                 )
                 ->setFailSafe(true)
-                //build method creates the transaction and returns the object
+                // build method creates the transaction and returns the object
                 ->build(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER);
 
             $payment->addTransactionCommentsToOrder(
@@ -190,17 +183,19 @@ class Adapter
             $payment->save();
             $order->save();
 
-            return  $transaction->save()->getTransactionId();
+            return $transaction->save()->getTransactionId();
         } catch (Exception $e) {
-            //log errors here
+            // log errors here
         }
     }
 
     /**
      * @param $transactionId
+     *
      * @return mixed
      */
-    public function getTransaction($transactionId){
+    public function getTransaction($transactionId)
+    {
         $transaction = $this->transactions->create()
             ->addFieldToFilter('txn_id', $transactionId)
             ->getFirstItem();
