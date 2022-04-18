@@ -72,8 +72,7 @@ class Adapter
      *
      * @return array
      */
-    public function initPayment($order)
-    {
+    public function initPayment($order){
         $additionalInformation = $order->getPayment()->getAdditionalInformation();
 
         $companyName = $this->config->getCompanyName();
@@ -86,15 +85,15 @@ class Adapter
             'currencyCode' => $order->getOrderCurrency()->ToString(),
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
             'identifier' => [
-                'email' => $order->getCustomerEmail(),
-            ],
+                'email' => $order->getCustomerEmail()
+            ]
         ];
 
         if (!empty($additionalInformation['bank_code'])) {
             $bankAccounts = $this->config->getAdditionalBankAccounts();
-            if ($bankAccounts) {
+            if($bankAccounts) {
                 foreach ($bankAccounts as $account) {
-                    if ($account['bank'] == $additionalInformation['bank_code']) {
+                    if($account['bank'] == $additionalInformation['bank_code']){
                         $companyName = $account['company'];
                         $companyBankAccount = $account['bank_account'];
                         break;
@@ -102,14 +101,20 @@ class Adapter
                 }
             }
 
-            if ($additionalInformation['bank_code'] == 'card') {
+            if($additionalInformation['bank_code'] == 'card'){
                 $params['cardPaymentMethod'] = [];
                 $params['paymentMethodPreferred'] = 'card';
             } else {
                 $params['bankId'] = $additionalInformation['bank_code'];
 
-                if ($this->config->getRedirectPreferred()) {
+                if($this->config->getRedirectPreferred()){
                     $params['redirectPreferred'] = 'true';
+                }
+            }
+        } else {
+            if($kevinMethods = $this->api->getPaymentMethods()) {
+                if (in_array("card", $kevinMethods)) {
+                    $params['cardPaymentMethod'] = [];
                 }
             }
         }
@@ -119,7 +124,7 @@ class Adapter
             'creditorName' => $companyName,
             'creditorAccount' => [
                 'iban' => $companyBankAccount,
-            ],
+            ]
         ];
 
         $response = $this->api->initPayment($params);
