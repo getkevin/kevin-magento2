@@ -86,8 +86,8 @@ class Adapter
             'currencyCode' => $order->getOrderCurrency()->ToString(),
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
             'identifier' => [
-                'email' => $order->getCustomerEmail()
-            ]
+                'email' => $order->getCustomerEmail(),
+            ],
         ];
 
         if (!empty($additionalInformation['bank_code'])) {
@@ -114,7 +114,7 @@ class Adapter
             }
         } else {
             if ($kevinMethods = $this->api->getPaymentMethods()) {
-                if (in_array("card", $kevinMethods)) {
+                if (in_array('card', $kevinMethods)) {
                     $params['cardPaymentMethod'] = [];
                 }
             }
@@ -125,7 +125,7 @@ class Adapter
             'creditorName' => $companyName,
             'creditorAccount' => [
                 'iban' => $companyBankAccount,
-            ]
+            ],
         ];
 
         $response = $this->api->initPayment($params);
