@@ -25,7 +25,7 @@ define([
             searchText: ko.observable(),
             showSearch: ko.observable(false),
             termsStatus: ko.observable(false),
-            termText: $t("I have read and agree with the <a href=\"https://kevin.eu/terms-conditions/\" target=\"_blank\">payment terms</a> and <a href=\"https://kevin.eu/privacy-policy/\" target=\"_blank\">privacy policy</a> of Kevin EU, UAB")
+            termText: $t('I have read and agree with the <a href="%1" target="_blank">payment terms</a> and <a href="%2" target="_blank">privacy policy</a> of Kevin EU, UAB').replace('%1', "https://kevin.eu/terms-conditions").replace('%2', "https://kevin.eu/privacy-policy")
         },
 
         initialize: function (config) {
