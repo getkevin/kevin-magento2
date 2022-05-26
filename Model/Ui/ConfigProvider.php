@@ -138,7 +138,7 @@ final class ConfigProvider implements ConfigProviderInterface
                     $paymentMethods['card'] = [
                         'id' => 'card',
                         'methodCode' => $subMethodCode,
-                        'title' => 'Credit/Debit card',
+                        'title' => __('Credit/Debit card'),
                         'description' => '',
                         'logoPath' => $this->_assetRepo->getUrl('Kevin_Payment::images/credit_card.png'),
                     ];
