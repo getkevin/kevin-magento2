@@ -2,7 +2,6 @@
 
 namespace Kevin\Payment\Block\Adminhtml\System\Config;
 
-use Google\Type\Date;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Exception\LocalizedException;
