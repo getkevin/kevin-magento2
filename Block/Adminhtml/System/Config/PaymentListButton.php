@@ -95,8 +95,8 @@ class PaymentListButton extends Field
             ->getCollection()
             ->getFirstItem();
 
-        if ($rowItem) {
-            return $this->timezone->date($rowItem->getCreatedAt())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+        if ($rowItem && $rowItem->getCreatedAt()) {
+            return $this->timezone->date(new \DateTime($rowItem->getCreatedAt()))->format('Y-m-d H:i:s');
         }
 
         return false;

@@ -59,7 +59,8 @@ class PaymentListUpdate extends Action
                     $this->helper->saveAvailablePaymentList($this->api->getBanks());
                     $this->helper->saveAvailableCountryList($this->api->getAvailableCountries());
 
-                    $updateDate = $this->timezone->date()->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                    $updateDate = $this->timezone->date(new \DateTime())->format('Y-m-d H:i:s');
+
                     $error = false;
                     $message = __('Updated');
                 }
