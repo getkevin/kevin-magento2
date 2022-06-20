@@ -8,7 +8,7 @@
     }
   ],
   "require": {
-    "getkevin/kevin-php": "0.14.*"
+    "getkevin/kevin-php": "0.16.2"
   },
   "type": "magento2-module",
   "license": [
