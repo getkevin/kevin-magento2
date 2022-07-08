@@ -54,6 +54,10 @@ class Kevin
             'version' => '0.3',
         ];
 
+        if (getenv('API_KEVIN_DOMAIN')) {
+            $options['domain'] = getenv('API_KEVIN_DOMAIN');
+        }
+
         $options = array_merge($options, $this->config->getSystemData());
 
         return new \Kevin\Client($clientId, $clientSecret, $options);
