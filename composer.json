@@ -1,6 +1,7 @@
 {
   "name": "getkevin/kevin-magento2",
   "description": "Implements integration with the Kevin payment service provider.",
+  "version": "1.2.0",
   "authors": [
     {
       "name": "kevin.",
@@ -8,7 +9,7 @@
     }
   ],
   "require": {
-    "getkevin/kevin-php": "0.14.*"
+    "getkevin/kevin-php": "0.16.2"
   },
   "type": "magento2-module",
   "license": [
@@ -29,7 +30,7 @@
       "chmod a+x php-cs-fixer",
       "./php-cs-fixer fix --config=./.php.cs.fixer.php -v --allow-risky=yes"
     ],
-    "check-style": [
+    "check-style": [Ō
       "wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.19.0/php-cs-fixer.phar -O php-cs-fixer",
       "chmod a+x php-cs-fixer",
       "./php-cs-fixer fix --config=./.php.cs.fixer.php -v --allow-risky=yes --dry-run"

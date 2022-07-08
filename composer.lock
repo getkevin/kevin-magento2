@@ -4,25 +4,28 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9359b8a3e40a89e4097b5d43ba881c0d",
+    "content-hash": "81c6b85d9c6b8fcc04af906d726e04a0",
     "packages": [
         {
             "name": "getkevin/kevin-php",
-            "version": "0.14.5",
+            "version": "0.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getkevin/kevin-php.git",
-                "reference": "66449e50bf1ee3399748e08a0c514085649ae66b"
+                "reference": "a7a207335fd02b8e135a5f42250ebe4e578d0234"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getkevin/kevin-php/zipball/66449e50bf1ee3399748e08a0c514085649ae66b",
-                "reference": "66449e50bf1ee3399748e08a0c514085649ae66b",
+                "url": "https://api.github.com/repos/getkevin/kevin-php/zipball/a7a207335fd02b8e135a5f42250ebe4e578d0234",
+                "reference": "a7a207335fd02b8e135a5f42250ebe4e578d0234",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": ">=5.6"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.19"
             },
             "type": "library",
             "autoload": {
@@ -44,9 +47,9 @@
             "support": {
                 "email": "help@kevin.eu",
                 "issues": "https://github.com/getkevin/kevin-php/issues",
-                "source": "https://github.com/getkevin/kevin-php/tree/0.14.5"
+                "source": "https://github.com/getkevin/kevin-php/tree/0.16.2"
             },
-            "time": "2021-11-16T17:37:28+00:00"
+            "time": "2022-05-02T12:48:33+00:00"
         }
     ],
     "packages-dev": [
@@ -2243,5 +2246,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
