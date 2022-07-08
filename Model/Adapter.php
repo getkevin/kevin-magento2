@@ -80,8 +80,8 @@ class Adapter
         $companyBankAccount = $this->config->getCompanyBankAccount();
 
         $params = [
-            'Redirect-URL' => $this->getContextUrl('kevin/payment/callback'),
-            'Webhook-URL' => $this->getContextUrl('kevin/payment/notify'),
+            'Redirect-URL' => $this->getRedirectContextUrl('kevin/payment/callback'),
+            'Webhook-URL' => $this->getWebHookContextUrl('kevin/payment/notify'),
             'description' => sprintf('Order %s', $order->getIncrementId()),
             'currencyCode' => $order->getOrderCurrency()->ToString(),
             'amount' => number_format($order->getGrandTotal(), 2, '.', ''),
@@ -214,10 +214,24 @@ class Adapter
      *
      * @return string
      */
-    private function getContextUrl($uri)
+    private function getWebHookContextUrl($uri)
     {
-        if (getenv('LOCAL_TUNNEL_URL')) {
-            return getenv('LOCAL_TUNNEL_URL').$uri;
+        if (getenv('CUSTOM_WEBHOOK_URL')) {
+            return getenv('CUSTOM_WEBHOOK_URL').$uri;
+        }
+
+        return $this->url->getUrl($uri);
+    }
+
+    /**
+     * @param $uri
+     *
+     * @return string
+     */
+    private function getRedirectContextUrl($uri)
+    {
+        if (getenv('CUSTOM_REDIRECT_URL')) {
+            return getenv('CUSTOM_REDIRECT_URL').$uri;
         }
 
         return $this->url->getUrl($uri);
