@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ddd73afcabc74edff5401350094b7ebd",
+    "content-hash": "a1680d97da75cb1e210e641daa0b3af0",
     "packages": [
         {
             "name": "getkevin/kevin-php",
