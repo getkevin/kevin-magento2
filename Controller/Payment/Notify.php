@@ -143,7 +143,7 @@ class Notify extends \Magento\Framework\App\Action\Action
                             $webhookUrl = $this->getRequest()->getUriString();
 
                             if (getenv('CUSTOM_WEBHOOK_URL')) {
-                                $webhookUrl = getenv('CUSTOM_WEBHOOK_URL') . 'kevin/payment/notify';
+                                $webhookUrl = getenv('CUSTOM_WEBHOOK_URL').'kevin/payment/notify';
                             }
 
                             $isValid = $this->api->verifySignature($signature, $body, $headers, $webhookUrl);
