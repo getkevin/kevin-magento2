@@ -1,7 +1,7 @@
 {
   "name": "getkevin/kevin-magento2",
   "description": "Implements integration with the Kevin payment service provider.",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "authors": [
     {
       "name": "kevin.",

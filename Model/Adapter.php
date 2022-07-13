@@ -143,7 +143,7 @@ class Adapter
     {
         $params = [
             'amount' => $amount,
-            'Webhook-URL' => $this->storeManager->getStore()->getBaseUrl().'kevin/payment/notify',
+            'Webhook-URL' => $this->getWebHookContextUrl('kevin/payment/notify'),
         ];
 
         $response = $this->api->initRefund($transactionId, $params);
