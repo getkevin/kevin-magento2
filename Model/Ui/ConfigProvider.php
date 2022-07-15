@@ -140,7 +140,7 @@ final class ConfigProvider implements ConfigProviderInterface
                         'methodCode' => $subMethodCode,
                         'title' => __('Credit/Debit card'),
                         'description' => '',
-                        'logoPath' => $this->_assetRepo->getUrl('Kevin_Payment::images/credit_card.png'),
+                        'logoPath' => 'https://cdn.kevin.eu/banks/images/VISA_MC.png',
                     ];
                 }
             }
