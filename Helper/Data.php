@@ -53,8 +53,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param $quoteId
-     *
      * @return void
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -70,8 +68,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param $tableName
-     *
      * @return void
      */
     public function truncateTable($tableName)
@@ -86,8 +82,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param $bankList
-     *
      * @return bool
      */
     public function saveAvailablePaymentList($bankList)
@@ -112,8 +106,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param $countryList
-     *
      * @return void
      */
     public function saveAvailableCountryList($countryList)

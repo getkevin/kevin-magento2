@@ -43,8 +43,6 @@ class CountryColumnViewBuilder extends Select
     /**
      * Set "id" for <select> element.
      *
-     * @param $value
-     *
      * @return $this
      */
     public function setInputId($value)
