@@ -68,9 +68,9 @@ class PaymentListButton extends Field
     }
 
     /**
-     * @throws LocalizedException
-     *
      * @return string
+     *
+     * @throws LocalizedException
      */
     public function getButtonHtml()
     {

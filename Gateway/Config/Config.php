@@ -36,6 +36,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     protected $serialize;
 
     /**
+     * @var string|null
+     */
+    private $methodCode;
+
+    /**
      * @param string|null $methodCode
      * @param string      $pathPattern
      */
@@ -204,8 +209,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * @param $countryList
-     *
      * @return void
      */
     public function setCountryList($countryList)

@@ -16,13 +16,11 @@ class Order
     }
 
     /**
-     * @param $result
-     *
      * @return mixed
      */
     public function afterGetCanSendNewEmailFlag(
         \Magento\Sales\Model\Order $subject,
-                                   $result
+        $result
     ) {
         if ($subject->getPayment()->getMethodInstance()->getCode() == \Kevin\Payment\Model\Ui\ConfigProvider::CODE
             && !$this->config->getSendOrderEmailBefore()) {

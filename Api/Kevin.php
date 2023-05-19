@@ -20,9 +20,6 @@ class Kevin
      */
     protected $config;
 
-    /**
-     * @var
-     */
     protected $banks;
 
     /**
@@ -42,9 +39,6 @@ class Kevin
     }
 
     /**
-     * @param $clientId
-     * @param $clientSecret
-     *
      * @return Client|void
      */
     public function getConnection($clientId = null, $clientSecret = null)
@@ -150,8 +144,6 @@ class Kevin
     }
 
     /**
-     * @param $bankId
-     *
      * @return array
      */
     public function getBank($bankId)
@@ -167,8 +159,6 @@ class Kevin
     }
 
     /**
-     * @param $params
-     *
      * @return mixed
      */
     public function initPayment($params)
@@ -177,9 +167,6 @@ class Kevin
     }
 
     /**
-     * @param $paymentId
-     * @param $attr
-     *
      * @return mixed
      */
     public function getPaymentStatus($paymentId, $attr)
@@ -188,9 +175,6 @@ class Kevin
     }
 
     /**
-     * @param $paymentId
-     * @param $attr
-     *
      * @return mixed
      */
     public function getPayment($paymentId, $attr)
@@ -216,9 +200,6 @@ class Kevin
     }
 
     /**
-     * @param $paymentId
-     * @param $attr
-     *
      * @return mixed
      */
     public function initRefund($paymentId, $attr)
@@ -227,8 +208,6 @@ class Kevin
     }
 
     /**
-     * @param $paymentId
-     *
      * @return mixed|void
      */
     public function getRefunds($paymentId)
@@ -240,11 +219,6 @@ class Kevin
     }
 
     /**
-     * @param $endpointSecret
-     * @param $requestBody
-     * @param $headers
-     * @param $webhookUrl
-     *
      * @return mixed
      */
     public function verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl)

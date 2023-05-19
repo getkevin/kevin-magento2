@@ -2,7 +2,6 @@
 
 namespace Kevin\Payment\Model\Creditmemo;
 
-use Exception;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Registry;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
@@ -59,8 +58,6 @@ class Delete
     }
 
     /**
-     * @param $creditmemoId
-     *
      * @return \Magento\Sales\Model\Order
      *
      * @throws \Exception
@@ -152,7 +149,7 @@ class Delete
             // delete credit-memo by credit-memo object
             $this->creditmemoRepository->delete($creditmemoData);
             $this->orderRepository->save($order);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             echo $exception->getMessage();
             exit;
             $this->logger->critical($exception->getMessage());
@@ -161,10 +158,6 @@ class Delete
         return $order;
     }
 
-    /**
-     * @param $creditmemo
-     * @param $order
-     */
     protected function setTotalandBaseTotal($creditmemo, $order)
     {
         if ($creditmemo->getDoTransaction()) {
@@ -178,9 +171,6 @@ class Delete
         }
     }
 
-    /**
-     * @param $order
-     */
     protected function saveOrder($order)
     {
         if ($order->hasShipments() || $order->hasInvoices() || $order->hasCreditmemos()) {

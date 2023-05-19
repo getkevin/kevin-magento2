@@ -16,8 +16,6 @@ class State
     }
 
     /**
-     * @param $order
-     *
      * @return mixed|void
      */
     public function aroundCheck(

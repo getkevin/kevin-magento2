@@ -68,8 +68,6 @@ class Adapter
     }
 
     /**
-     * @param $order
-     *
      * @return array
      */
     public function initPayment($order)
@@ -135,7 +133,6 @@ class Adapter
 
     /**
      * @param $payment
-     * @param $amount
      *
      * @return array
      */
@@ -196,8 +193,6 @@ class Adapter
     }
 
     /**
-     * @param $transactionId
-     *
      * @return mixed
      */
     public function getTransaction($transactionId)
@@ -210,8 +205,6 @@ class Adapter
     }
 
     /**
-     * @param $uri
-     *
      * @return string
      */
     private function getWebHookContextUrl($uri)
@@ -224,8 +217,6 @@ class Adapter
     }
 
     /**
-     * @param $uri
-     *
      * @return string
      */
     private function getRedirectContextUrl($uri)

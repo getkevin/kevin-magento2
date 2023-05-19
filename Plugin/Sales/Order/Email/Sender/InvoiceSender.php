@@ -23,8 +23,6 @@ class InvoiceSender
     }
 
     /**
-     * @param $forceSyncMode
-     *
      * @return void
      */
     public function aroundSend(

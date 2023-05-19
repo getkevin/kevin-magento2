@@ -10,9 +10,6 @@ use Monolog\Logger;
  */
 class Handler extends Base
 {
-    /**
-     * @var
-     */
     protected $loggerType = Logger::INFO;
 
     /**
