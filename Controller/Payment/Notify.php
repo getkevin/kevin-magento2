@@ -2,7 +2,7 @@
 
 namespace Kevin\Payment\Controller\Payment;
 
-use Zend\Json\Json;
+use Laminas\Json\Json;
 
 /**
  * Class Notify.
