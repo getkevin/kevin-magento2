@@ -54,7 +54,7 @@ class Kevin
 
         $options = array_merge($options, $this->config->getSystemData());
 
-        return new \Kevin\Client($clientId, $clientSecret, $options);
+        return new Client($clientId, $clientSecret, $options);
     }
 
     /**
@@ -158,25 +158,16 @@ class Kevin
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function initPayment($params)
     {
         return $this->getClient()->payment()->initPayment($params);
     }
 
-    /**
-     * @return mixed
-     */
     public function getPaymentStatus($paymentId, $attr)
     {
         return $this->getClient()->payment()->getPaymentStatus($paymentId, $attr);
     }
 
-    /**
-     * @return mixed
-     */
     public function getPayment($paymentId, $attr)
     {
         return $this->getClient()->payment()->getPayment($paymentId, $attr);
@@ -199,9 +190,6 @@ class Kevin
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function initRefund($paymentId, $attr)
     {
         return $this->getClient()->payment()->initiatePaymentRefund($paymentId, $attr);
@@ -218,9 +206,6 @@ class Kevin
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function verifySignature($endpointSecret, $requestBody, $headers, $webhookUrl)
     {
         $timestampTimeout = self::SIGNATURE_VERIFY_TIMEOUT;

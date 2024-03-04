@@ -9,8 +9,6 @@ class Info extends \Magento\Payment\Block\Info
 {
     /**
      * @param null $transport
-     *
-     * @return mixed
      */
     protected function _prepareSpecificInformation($transport = null)
     {

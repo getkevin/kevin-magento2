@@ -15,9 +15,6 @@ class ModuleStatus implements \Magento\Config\Model\Config\CommentInterface
         $this->_config = $config;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCommentText($elementValue)
     {
         if (!$this->_config->getStatus()) {
