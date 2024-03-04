@@ -81,13 +81,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'Logo'
                 )
                 ->addColumn(
-                    'created_at', \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP, 100,
-                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+                    'created_at', Table::TYPE_TIMESTAMP, 100,
+                    ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                     'Created At'
                 )
                 ->addColumn(
-                    'updated_at', \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP, 100,
-                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+                    'updated_at', Table::TYPE_TIMESTAMP, 100,
+                    ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                     'Updated At'
                 )->addIndex(
                     $setup->getIdxName('kevin_payment_list', ['country_id']),

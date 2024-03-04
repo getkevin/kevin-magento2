@@ -72,17 +72,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
     }
 
-    /**
-     * @return mixed
-     */
     public function getStatus()
     {
         return $this->getValue('status');
     }
 
-    /**
-     * @return mixed
-     */
     public function getActive()
     {
         return $this->getValue('active');
@@ -104,17 +98,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return (string)$this->getValue('client_secret');
     }
 
-    /**
-     * @return mixed
-     */
     public function getSignature()
     {
         return $this->getValue('signature');
     }
 
-    /**
-     * @return mixed
-     */
     public function getRedirectPreferred()
     {
         return (int) $this->getValue('extra_settings/redirect_preferred');
@@ -144,33 +132,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return (int) $this->getValue('extra_settings/show_search');
     }
 
-    /**
-     * @return mixed
-     */
     public function getPaymentList()
     {
         return (int) $this->getValue('extra_settings/payment_list');
     }
 
-    /**
-     * @return mixed
-     */
     public function getCompanyName()
     {
         return $this->getValue('default_bank/company_name');
     }
 
-    /**
-     * @return mixed
-     */
     public function getCompanyBankAccount()
     {
         return $this->getValue('default_bank/company_bank_account');
     }
 
-    /**
-     * @return mixed
-     */
     public function getAdditionalBankAccounts()
     {
         $value = $this->getValue('additional_bank/additional_bank_list');
@@ -178,9 +154,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return $value ? $this->serialize->unserialize($value) : '';
     }
 
-    /**
-     * @return mixed
-     */
     public function getKevinCountryList()
     {
         return $this->getValue('country_list');

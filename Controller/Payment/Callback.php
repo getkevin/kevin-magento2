@@ -15,7 +15,7 @@ class Callback extends \Magento\Framework\App\Action\Action
     protected $api;
 
     /**
-     * @var \Kevin\Payment\Model\Adapter
+     * @var KevinAdapter
      */
     protected $adapter;
 
@@ -65,9 +65,6 @@ class Callback extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
     }
 
-    /**
-     * @return mixed
-     */
     protected function _getCheckout()
     {
         return $this->_objectManager->get('Magento\Checkout\Model\Session');

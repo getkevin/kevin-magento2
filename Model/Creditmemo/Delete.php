@@ -32,7 +32,7 @@ class Delete
     protected $_authSession;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
@@ -58,7 +58,7 @@ class Delete
     }
 
     /**
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      *
      * @throws \Exception
      */
@@ -174,16 +174,16 @@ class Delete
     protected function saveOrder($order)
     {
         if ($order->hasShipments() || $order->hasInvoices() || $order->hasCreditmemos()) {
-            $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
-                ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING))
+            $order->setState(Order::STATE_PROCESSING)
+                ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING))
                 ->save();
         } elseif (!$order->canInvoice() && !$order->canShip() && !$order->hasCreditmemos()) {
-            $order->setState(\Magento\Sales\Model\Order::STATE_COMPLETE)
-                ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_COMPLETE))
+            $order->setState(Order::STATE_COMPLETE)
+                ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE))
                 ->save();
         } else {
-            $order->setState(\Magento\Sales\Model\Order::STATE_NEW)
-                ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_NEW))
+            $order->setState(Order::STATE_NEW)
+                ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_NEW))
                 ->save();
         }
     }
