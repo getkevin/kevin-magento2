@@ -15,9 +15,6 @@ class Order
         $this->config = $config;
     }
 
-    /**
-     * @return mixed
-     */
     public function afterGetCanSendNewEmailFlag(
         \Magento\Sales\Model\Order $subject,
         $result

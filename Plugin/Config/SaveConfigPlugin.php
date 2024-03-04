@@ -65,7 +65,7 @@ class SaveConfigPlugin
                 }
 
                 if ($clientId && $clientSecret) {
-                    if (strpos($clientSecret, '***') !== false) {
+                    if (str_contains($clientSecret, '***')) {
                         $clientSecret = $this->config->getClientSecret();
                     }
 
