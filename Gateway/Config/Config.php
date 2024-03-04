@@ -82,14 +82,20 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return $this->getValue('active');
     }
 
+    /**
+     * @return string
+     */
     public function getClientId()
     {
-        return $this->getValue('client_id');
+        return (string) $this->getValue('client_id');
     }
 
+    /**
+     * @return string
+     */
     public function getClientSecret()
     {
-        return $this->getValue('client_secret');
+        return (string) $this->getValue('client_secret');
     }
 
     public function getSignature()
