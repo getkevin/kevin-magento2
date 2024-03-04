@@ -59,9 +59,6 @@ class Redirect extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
     }
 
-    /**
-     * @return mixed
-     */
     protected function _getCheckout()
     {
         return $this->_objectManager->get('Magento\Checkout\Model\Session');
@@ -176,9 +173,6 @@ class Redirect extends \Magento\Framework\App\Action\Action
         return $this->getUUID();
     }
 
-    /**
-     * @return mixed
-     */
     protected function getCustomerIpAddress()
     {
         return $this->remoteAddress->getRemoteAddress();

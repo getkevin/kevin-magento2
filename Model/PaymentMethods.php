@@ -10,7 +10,7 @@ class PaymentMethods extends \Magento\Framework\Model\AbstractModel
     public function _construct()
     {
         $this->_init(
-            \Kevin\Payment\Model\ResourceModel\PaymentMethods::class
+            ResourceModel\PaymentMethods::class
         );
     }
 }

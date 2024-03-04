@@ -114,9 +114,6 @@ class Notify extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
     }
 
-    /**
-     * @return mixed
-     */
     public function execute()
     {
         $body = $this->getRequest()->getContent();

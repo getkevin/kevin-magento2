@@ -132,8 +132,6 @@ class Adapter
     }
 
     /**
-     * @param $payment
-     *
      * @return array
      */
     public function initRefund($transactionId, $amount)
@@ -151,8 +149,6 @@ class Adapter
     /**
      * @param null  $order
      * @param array $paymentData
-     *
-     * @return mixed
      */
     public function createTransaction($order = null, $paymentData = [])
     {
@@ -192,9 +188,6 @@ class Adapter
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function getTransaction($transactionId)
     {
         $transaction = $this->transactions->create()
